@@ -1,0 +1,53 @@
+<div class="pagina-login">
+  <mat-card class="tarjeta-login">
+    <div class="encabezado">
+      <mat-icon class="logo">inventory_2</mat-icon>
+      <h1>INDUMETAL PERÚ</h1>
+      <p>Intranet de Gestión de Almacén</p>
+    </div>
+
+    @if (error()) {
+      <div class="mensaje-error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="ingresar()">
+      <mat-form-field appearance="outline" class="campo-completo">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput formControlName="correo" type="email" placeholder="admin@indumetal.pe" autocomplete="username">
+        <mat-icon matSuffix>mail_outline</mat-icon>
+        @if (form.get('correo')?.hasError('required')) {
+          <mat-error>El correo es obligatorio</mat-error>
+        }
+        @if (form.get('correo')?.hasError('email')) {
+          <mat-error>Ingresa un correo válido</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="campo-completo">
+        <mat-label>Contraseña</mat-label>
+        <input matInput formControlName="password" [type]="ocultarPassword() ? 'password' : 'text'" autocomplete="current-password">
+        <button mat-icon-button matSuffix type="button" (click)="ocultarPassword.set(!ocultarPassword())">
+          <mat-icon>{{ ocultarPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (form.get('password')?.hasError('required')) {
+          <mat-error>La contraseña es obligatoria</mat-error>
+        }
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" type="submit" class="boton-ingresar" [disabled]="cargando() || form.invalid">
+        @if (cargando()) {
+          <mat-spinner diameter="22"></mat-spinner>
+        } @else {
+          Ingresar
+        }
+      </button>
+    </form>
+
+    <button mat-button class="enlace-olvide" (click)="abrirRecuperarPassword()">
+      ¿Olvidaste tu contraseña?
+    </button>
+  </mat-card>
+</div>
