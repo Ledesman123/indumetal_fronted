@@ -1,0 +1,117 @@
+<div class="contenedor">
+  <div class="encabezado-pagina">
+    <h2>Almacenes y ubicaciones</h2>
+    <p>Gestiona los almacenes de la planta y sus ubicaciones internas de almacenamiento.</p>
+  </div>
+
+  <div class="layout-maestro-detalle">
+
+    <!-- Columna izquierda: lista de almacenes -->
+    <div mat-card class="panel-maestro">
+      <div class="encabezado-panel">
+        <h3>Almacenes</h3>
+        <button mat-icon-button color="primary" (click)="nuevoAlmacen()" matTooltip="Nuevo almacén">
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
+
+      @if (cargandoAlmacenes()) {
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      }
+
+      <div class="lista-almacenes">
+        @for (almacen of almacenes(); track almacen.id) {
+          <div
+            class="item-almacen"
+            [class.item-seleccionado]="almacenSeleccionado()?.id === almacen.id"
+            (click)="seleccionarAlmacen(almacen)">
+
+            <div class="info-almacen">
+              <mat-icon>warehouse</mat-icon>
+              <div class="texto-almacen">
+                <span class="nombre">{{ almacen.nombre }}</span>
+                <span class="codigo">{{ almacen.codigo }}</span>
+              </div>
+            </div>
+
+            <div class="acciones-almacen">
+              @if (!almacen.activo) {
+                <span class="etiqueta-inactivo">Inactivo</span>
+              }
+              <button mat-icon-button (click)="editarAlmacen(almacen, $event)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              @if (almacen.activo) {
+                <button mat-icon-button (click)="desactivarAlmacen(almacen, $event)" matTooltip="Desactivar">
+                  <mat-icon>block</mat-icon>
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Columna derecha: ubicaciones del almacen seleccionado -->
+    <div mat-card class="panel-detalle">
+      @if (almacenSeleccionado(); as almacen) {
+        <div class="encabezado-panel">
+          <h3>Ubicaciones de "{{ almacen.nombre }}"</h3>
+          <button mat-flat-button color="primary" (click)="nuevaUbicacion()">
+            <mat-icon>add</mat-icon>
+            Nueva ubicación
+          </button>
+        </div>
+
+        @if (cargandoUbicaciones()) {
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        }
+
+        <table mat-table [dataSource]="ubicaciones()" class="tabla-ubicaciones">
+          <ng-container matColumnDef="codigo">
+            <th mat-header-cell *matHeaderCellDef>Código de ubicación</th>
+            <td mat-cell *matCellDef="let ubicacion"><strong>{{ ubicacion.codigo }}</strong></td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let ubicacion">
+              <span [class.chip-activo]="ubicacion.activo" [class.chip-inactivo]="!ubicacion.activo" class="chip">
+                {{ ubicacion.activo ? 'Activa' : 'Inactiva' }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let ubicacion">
+              <button mat-icon-button (click)="editarUbicacion(ubicacion)" matTooltip="Editar">
+                <mat-icon>edit</mat-icon>
+              </button>
+              @if (ubicacion.activo) {
+                <button mat-icon-button (click)="desactivarUbicacion(ubicacion)" matTooltip="Desactivar">
+                  <mat-icon>block</mat-icon>
+                </button>
+              }
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnasUbicacion"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnasUbicacion;"></tr>
+        </table>
+
+        @if (!cargandoUbicaciones() && ubicaciones().length === 0) {
+          <div class="estado-vacio">
+            <mat-icon>location_off</mat-icon>
+            <p>Este almacén todavía no tiene ubicaciones registradas.</p>
+          </div>
+        }
+      } @else {
+        <div class="estado-vacio">
+          <mat-icon>arrow_back</mat-icon>
+          <p>Selecciona un almacén de la izquierda para ver sus ubicaciones.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

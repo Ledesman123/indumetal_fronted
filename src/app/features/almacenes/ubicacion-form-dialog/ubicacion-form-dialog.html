@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>{{ esEdicion ? 'Editar ubicación' : 'Nueva ubicación' }}</h2>
+
+<mat-dialog-content>
+  @if (error()) {
+    <div class="mensaje-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  <form [formGroup]="form" class="formulario">
+    <mat-form-field appearance="outline" class="campo-completo">
+      <mat-label>Código de ubicación</mat-label>
+      <input matInput formControlName="codigo" placeholder="Ej: A-01-01">
+      @if (form.get('codigo')?.hasError('required')) {
+        <mat-error>El código es obligatorio</mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cerrar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="guardar()" [disabled]="cargando() || form.invalid">
+    @if (cargando()) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      {{ esEdicion ? 'Guardar cambios' : 'Crear ubicación' }}
+    }
+  </button>
+</mat-dialog-actions>

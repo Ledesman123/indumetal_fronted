@@ -1,0 +1,125 @@
+.contenedor {
+  padding: 28px 32px;
+}
+
+.encabezado-pagina {
+  margin-bottom: 24px;
+
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
+  p { color: #767e8c; margin: 0; font-size: 14px; }
+}
+
+.layout-maestro-detalle {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.panel-maestro, .panel-detalle {
+  background: white;
+  border-radius: 10px;
+  padding: 18px 20px;
+  min-height: 400px;
+}
+
+.encabezado-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1f2b;
+  }
+}
+
+.lista-almacenes {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.item-almacen {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &:hover {
+    background: #f4f6f9;
+  }
+
+  &.item-seleccionado {
+    background: #e8f0fe;
+  }
+}
+
+.info-almacen {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  mat-icon {
+    color: #1c5fd1;
+  }
+}
+
+.texto-almacen {
+  display: flex;
+  flex-direction: column;
+
+  .nombre { font-size: 13px; font-weight: 600; color: #1a1f2b; }
+  .codigo { font-size: 11px; color: #888; }
+}
+
+.acciones-almacen {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.etiqueta-inactivo {
+  font-size: 10px;
+  color: #b3261e;
+  background: #fdecea;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-right: 4px;
+}
+
+.tabla-ubicaciones {
+  width: 100%;
+}
+
+.chip {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.chip-activo { background: #e6f4ea; color: #1e7e34; }
+.chip-inactivo { background: #fdecea; color: #b3261e; }
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 60px 0;
+  color: #999;
+  text-align: center;
+
+  mat-icon { font-size: 36px; width: 36px; height: 36px; }
+}

@@ -10,6 +10,7 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard) },
       { path: 'materiales', loadComponent: () => import('./features/materiales/materiales-list/materiales-list').then(m => m.MaterialesList) },
+      { path: 'almacenes', loadComponent: () => import('./features/almacenes/almacenes-list/almacenes-list').then(m => m.AlmacenesList) },
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
     ]
   },
