@@ -1,0 +1,113 @@
+<div class="encabezado-pagina">
+  <h2>Hola, {{ nombreUsuario }}</h2>
+  <p>Resumen general del almacén INDUMETAL.</p>
+</div>
+
+@if (cargando()) {
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+}
+
+<!-- Fila de tarjetas de indicadores (tipo "0 citas hoy" de la referencia) -->
+<div class="fila-indicadores">
+  <div mat-card class="tarjeta-indicador">
+    <div class="icono-indicador icono-azul">
+      <mat-icon>category</mat-icon>
+    </div>
+    <div class="dato-indicador">
+      <span class="numero">{{ resumen()?.materialesActivos ?? '—' }}</span>
+      <span class="etiqueta">Materiales activos</span>
+    </div>
+  </div>
+
+  <div mat-card class="tarjeta-indicador">
+    <div class="icono-indicador icono-verde">
+      <mat-icon>warehouse</mat-icon>
+    </div>
+    <div class="dato-indicador">
+      <span class="numero">{{ resumen()?.almacenesRegistrados ?? '—' }}</span>
+      <span class="etiqueta">Almacenes registrados</span>
+    </div>
+  </div>
+
+  <div mat-card class="tarjeta-indicador">
+    <div class="icono-indicador icono-rojo">
+      <mat-icon>warning_amber</mat-icon>
+    </div>
+    <div class="dato-indicador">
+      <span class="numero">{{ resumen()?.materialesEnAlertaStockMinimo ?? '—' }}</span>
+      <span class="etiqueta">En alerta de stock mínimo</span>
+    </div>
+  </div>
+
+  <div mat-card class="tarjeta-indicador">
+    <div class="icono-indicador icono-morado">
+      <mat-icon>payments</mat-icon>
+    </div>
+    <div class="dato-indicador">
+      <span class="numero">S/ {{ (resumen()?.valorizacionTotalInventario ?? 0).toFixed(2) }}</span>
+      <span class="etiqueta">Valorización del inventario</span>
+    </div>
+  </div>
+</div>
+
+<!-- Fila de paneles con graficos de barras (tipo "Citas por estado" de la referencia) -->
+<div class="fila-paneles">
+
+  <div mat-card class="panel">
+    <h3>Materiales con mayor movimiento</h3>
+    @for (material of materialesTop(); track material.materialId) {
+      <div class="fila-barra">
+        <span class="etiqueta-barra">{{ material.sku }} — {{ material.nombre }}</span>
+        <div class="barra-fondo">
+          <div class="barra-relleno barra-azul" [style.width.%]="(material.cantidadMovimientos / maxMovimientos()) * 100"></div>
+        </div>
+        <span class="valor-barra">{{ material.cantidadMovimientos }} mov.</span>
+      </div>
+    } @empty {
+      <p class="sin-datos">Sin movimientos registrados todavía.</p>
+    }
+  </div>
+
+  <div mat-card class="panel">
+    <h3>Valorización por categoría</h3>
+    @for (item of valorizacion()?.porCategoria ?? []; track item.categoria) {
+      <div class="fila-barra">
+        <span class="etiqueta-barra">{{ etiquetaCategoria(item.categoria) }}</span>
+        <div class="barra-fondo">
+          <div class="barra-relleno barra-verde" [style.width.%]="porcentajeDeCategoria(item.valorizacion)"></div>
+        </div>
+        <span class="valor-barra">S/ {{ item.valorizacion.toFixed(2) }}</span>
+      </div>
+    } @empty {
+      <p class="sin-datos">Sin datos de valorización todavía.</p>
+    }
+  </div>
+
+  <div mat-card class="panel panel-cumplimiento">
+    <h3>Nivel de cumplimiento de despacho</h3>
+    @if (cumplimiento(); as c) {
+      <div class="circulo-progreso">
+        <svg viewBox="0 0 100 100">
+          <circle class="circulo-fondo" cx="50" cy="50" r="42"></circle>
+          <circle
+            class="circulo-relleno"
+            cx="50" cy="50" r="42"
+            [style.strokeDasharray]="'264'"
+            [style.strokeDashoffset]="264 - (264 * c.porcentajeCumplimiento / 100)">
+          </circle>
+        </svg>
+        <div class="texto-circulo">
+          <span class="porcentaje">{{ c.porcentajeCumplimiento.toFixed(0) }}%</span>
+          <span class="detalle">{{ c.materialesEnCondicionDeDespacho }}/{{ c.materialesActivos }} materiales</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<div class="tarjetas-modulos">
+  <a mat-card class="tarjeta-modulo" routerLink="/materiales">
+    <mat-icon>category</mat-icon>
+    <span>Materiales</span>
+  </a>
+</div>
