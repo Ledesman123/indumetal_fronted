@@ -1,0 +1,75 @@
+<mat-sidenav-container class="contenedor-layout">
+
+  <mat-sidenav #sidenav mode="side" [opened]="sidebarAbierto" class="sidebar">
+    <div class="marca">
+      <mat-icon class="logo-icono">inventory_2</mat-icon>
+      @if (sidebarAbierto) {
+        <div class="marca-texto">
+          <strong>INDUMETAL</strong>
+          <span>Gestión de Almacén</span>
+        </div>
+      }
+    </div>
+
+    <mat-nav-list class="lista-menu">
+      @for (item of menuActual; track item.ruta) {
+        <a mat-list-item [routerLink]="item.ruta" routerLinkActive="item-activo" [matTooltip]="sidebarAbierto ? '' : item.etiqueta" matTooltipPosition="right">
+          <mat-icon matListItemIcon>{{ item.icono }}</mat-icon>
+          @if (sidebarAbierto) {
+            <span matListItemTitle>{{ item.etiqueta }}</span>
+          }
+        </a>
+      }
+    </mat-nav-list>
+
+    <div class="pie-sidebar">
+      @if (sidebarAbierto) {
+        <span>v1.0.0 · Sprint 2</span>
+      }
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="contenido-layout">
+
+    <mat-toolbar class="header">
+      <button mat-icon-button (click)="toggleSidebar()" matTooltip="Contraer/expandir menú">
+        <mat-icon>menu</mat-icon>
+      </button>
+
+      <span class="espaciador"></span>
+
+      <button mat-icon-button matTooltip="Notificaciones" matBadge="0" matBadgeSize="small" matBadgeColor="warn" [matBadgeHidden]="true">
+        <mat-icon>notifications_none</mat-icon>
+      </button>
+
+      <button mat-icon-button matTooltip="Ayuda">
+        <mat-icon>help_outline</mat-icon>
+      </button>
+
+      <button mat-button [matMenuTriggerFor]="menuUsuario" class="boton-usuario">
+        <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
+        <div class="datos-usuario">
+          <span class="nombre">{{ sesion?.nombreCompleto }}</span>
+          <span class="rol-usuario">{{ sesion?.rol }}</span>
+        </div>
+        <mat-icon>arrow_drop_down</mat-icon>
+      </button>
+
+      <mat-menu #menuUsuario="matMenu">
+        <button mat-menu-item (click)="authService.logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar sesión</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
+
+    <main class="area-contenido">
+      <router-outlet></router-outlet>
+    </main>
+
+    <footer class="pie-pagina">
+      <span>© 2026 INDUMETAL PERÚ S.A.C. — Intranet de Gestión de Almacén</span>
+    </footer>
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

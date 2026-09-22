@@ -2,7 +2,6 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
-import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,10 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { Router } from '@angular/router';
 import { Material, CATEGORIAS_MATERIAL } from '../../../core/models/material.model';
 import { MaterialService } from '../../../core/services/material.service';
-import { AuthService } from '../../../core/services/auth.service';
 import { MaterialFormDialog } from '../material-form-dialog/material-form-dialog';
 import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 
@@ -27,7 +24,6 @@ import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
     CommonModule,
     FormsModule,
     MatTableModule,
-    MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
@@ -44,8 +40,6 @@ export class MaterialesList implements OnInit {
   private materialService = inject(MaterialService);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
-  authService = inject(AuthService);
-  router = inject(Router);
 
   columnas = ['imagen', 'sku', 'nombre', 'categoria', 'stock', 'costo', 'estado', 'acciones'];
   materiales = signal<Material[]>([]);

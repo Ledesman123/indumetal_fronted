@@ -1,19 +1,18 @@
-.titulo {
-  margin-left: 8px;
-  font-weight: 500;
-}
-
-.espaciador {
-  flex: 1 1 auto;
-}
-
-.rol {
-  margin-right: 16px;
-  font-size: 13px;
-}
-
 .contenedor {
   padding: 24px;
+}
+
+.encabezado-pagina {
+  margin-bottom: 20px;
+
+  h2 {
+    margin: 0 0 4px;
+  }
+
+  p {
+    color: #777;
+    margin: 0;
+  }
 }
 
 .barra-acciones {

@@ -1,20 +1,13 @@
-<mat-toolbar color="primary">
-  <button mat-icon-button (click)="router.navigate(['/dashboard'])" matTooltip="Volver al panel">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <span class="titulo">Materiales</span>
-  <span class="espaciador"></span>
-  <span class="rol">{{ authService.obtenerSesion()()?.nombreCompleto }}</span>
-  <button mat-icon-button (click)="authService.logout()" matTooltip="Cerrar sesión">
-    <mat-icon>logout</mat-icon>
-  </button>
-</mat-toolbar>
-
 @if (cargando()) {
   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
 }
 
 <div class="contenedor">
+  <div class="encabezado-pagina">
+    <h2>Materiales</h2>
+    <p>Gestiona el catálogo de materiales, insumos y herramientas del almacén.</p>
+  </div>
+
   <div class="barra-acciones">
     <div class="filtros">
       <mat-form-field appearance="outline" class="campo-busqueda">
