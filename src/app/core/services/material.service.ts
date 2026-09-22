@@ -113,4 +113,8 @@ export class MaterialService {
     );
     return of(void 0).pipe(delay(400));
   }
+  /** TEMPORAL (Sprint 2): snapshot sincrono, usado internamente por MovimientoService. */
+  obtenerPorIdSync(id: number): Material | undefined {
+    return this.materiales().find((m) => m.id === id);
+  }
 }

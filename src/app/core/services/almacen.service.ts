@@ -45,4 +45,8 @@ export class AlmacenService {
     this.almacenes.update((lista) => lista.map((a) => (a.id === id ? { ...a, activo: false } : a)));
     return of(void 0).pipe(delay(400));
   }
+    /** TEMPORAL (Sprint 2): snapshot sincrono, usado internamente por MovimientoService. */
+  obtenerPorIdSync(id: number): Almacen | undefined {
+    return this.almacenes().find((a) => a.id === id);
+  }
 }
