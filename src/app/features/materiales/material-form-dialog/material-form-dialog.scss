@@ -1,0 +1,102 @@
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+}
+
+.campo-completo {
+  width: 100%;
+}
+
+.fila-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.fila-triple {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+}
+
+.checkbox-lote {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.zona-imagen {
+  border: 2px dashed #c4c4c4;
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  transition: border-color 0.2s, background-color 0.2s;
+  background: #fafafa;
+
+  &.arrastrando {
+    border-color: #1f3a5c;
+    background: #eef3f8;
+  }
+}
+
+.placeholder-imagen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 0;
+  color: #777;
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+    color: #aaa;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+    font-weight: 500;
+  }
+
+  span {
+    font-size: 12px;
+    margin: 4px 0;
+  }
+}
+
+.preview-imagen {
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  img {
+    max-height: 160px;
+    max-width: 100%;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+
+  .boton-quitar {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.mensaje-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #b3261e;
+  background: #fdecea;
+  padding: 10px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}

@@ -1,0 +1,109 @@
+.titulo {
+  margin-left: 8px;
+  font-weight: 500;
+}
+
+.espaciador {
+  flex: 1 1 auto;
+}
+
+.rol {
+  margin-right: 16px;
+  font-size: 13px;
+}
+
+.contenedor {
+  padding: 24px;
+}
+
+.barra-acciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.filtros {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.campo-busqueda {
+  width: 320px;
+}
+
+.campo-categoria {
+  width: 220px;
+}
+
+.tabla-envoltorio {
+  overflow-x: auto;
+  border-radius: 8px;
+  background: white;
+
+  table {
+    width: 100%;
+  }
+}
+
+.miniatura {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.miniatura-vacia {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  color: #999;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.nombre-material {
+  font-weight: 500;
+}
+
+.descripcion-material {
+  font-size: 12px;
+  color: #777;
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-activo {
+  background: #e6f4ea !important;
+  color: #1e7e34 !important;
+}
+
+.chip-inactivo {
+  background: #fdecea !important;
+  color: #b3261e !important;
+}
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 0;
+  color: #999;
+
+  mat-icon {
+    font-size: 40px;
+    width: 40px;
+    height: 40px;
+  }
+}

@@ -8,6 +8,11 @@ export const routes: Routes = [
     loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard),
     canActivate: [authGuard]
   },
+  {
+    path: 'materiales',
+    loadComponent: () => import('./features/materiales/materiales-list/materiales-list').then(m => m.MaterialesList),
+    canActivate: [authGuard]
+  },
   { path: '', pathMatch: 'full', redirectTo: 'login' },
   { path: '**', redirectTo: 'login' }
 ];
