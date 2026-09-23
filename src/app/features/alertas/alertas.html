@@ -1,0 +1,41 @@
+<div class="contenedor">
+  <div class="encabezado-pagina">
+    <h2>Alertas de stock mínimo</h2>
+    <p>Materiales cuyo saldo actual está por debajo del stock mínimo configurado. El sistema también envía estas alertas por correo automáticamente todos los días.</p>
+  </div>
+
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  @if (!cargando() && materialesEnAlerta().length === 0) {
+    <div mat-card class="tarjeta-sin-alertas">
+      <mat-icon>check_circle</mat-icon>
+      <h3>Todo en orden</h3>
+      <p>Ningún material está por debajo de su stock mínimo en este momento.</p>
+    </div>
+  }
+
+  <div class="lista-alertas">
+    @for (item of materialesEnAlerta(); track item.materialId + '-' + item.ubicacionId) {
+      <div mat-card class="tarjeta-alerta">
+        <div class="icono-alerta">
+          <mat-icon>warning_amber</mat-icon>
+        </div>
+        <div class="info-alerta">
+          <div class="fila-superior">
+            <strong>{{ item.materialSku }} — {{ item.materialNombre }}</strong>
+            <span class="faltante">Faltan {{ faltante(item) }} {{ item.unidadMedida }}</span>
+          </div>
+          <div class="fila-detalle">
+            <span>{{ item.almacenNombre }} · {{ item.ubicacionCodigo }}</span>
+            <span>Actual: <strong>{{ item.cantidad }}</strong> / Mínimo: <strong>{{ item.stockMinimo }}</strong></span>
+          </div>
+        </div>
+        <button mat-flat-button color="primary" (click)="irARegistrarIngreso()">
+          Registrar ingreso
+        </button>
+      </div>
+    }
+  </div>
+</div>

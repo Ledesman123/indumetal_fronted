@@ -7,7 +7,8 @@ export const MENU_POR_ROL: Record<string, MenuItem[]> = {
     { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' },
     { etiqueta: 'Movimientos', icono: 'swap_horiz', ruta: '/movimientos' },
     { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' },
-    { etiqueta: 'Inventario físico', icono: 'playlist_add_check', ruta: '/inventario-fisico' }
+    { etiqueta: 'Inventario físico', icono: 'playlist_add_check', ruta: '/inventario-fisico' },
+    { etiqueta: 'Alertas', icono: 'notifications_active', ruta: '/alertas' }
   ],
   SUPERVISOR_ALMACEN: [
     { etiqueta: 'Panel', icono: 'dashboard', ruta: '/dashboard' },
@@ -15,14 +16,16 @@ export const MENU_POR_ROL: Record<string, MenuItem[]> = {
     { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' },
     { etiqueta: 'Movimientos', icono: 'swap_horiz', ruta: '/movimientos' },
     { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' },
-    { etiqueta: 'Inventario físico', icono: 'playlist_add_check', ruta: '/inventario-fisico' }
+    { etiqueta: 'Inventario físico', icono: 'playlist_add_check', ruta: '/inventario-fisico' },
+    { etiqueta: 'Alertas', icono: 'notifications_active', ruta: '/alertas' }
   ],
   JEFE_PRODUCCION: [
     { etiqueta: 'Panel', icono: 'dashboard', ruta: '/dashboard' },
     { etiqueta: 'Materiales', icono: 'category', ruta: '/materiales' },
     { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' },
     { etiqueta: 'Movimientos', icono: 'swap_horiz', ruta: '/movimientos' },
-    { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' }
+    { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' },
+    { etiqueta: 'Alertas', icono: 'notifications_active', ruta: '/alertas' }
   ],
   ALMACENERO: [
     { etiqueta: 'Materiales', icono: 'category', ruta: '/materiales' },
