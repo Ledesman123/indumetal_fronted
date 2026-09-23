@@ -1,0 +1,124 @@
+<div class="contenedor">
+  <div class="encabezado-pagina">
+    <h2>Reportes</h2>
+    <p>Exporta movimientos, kardex y stock actual en PDF o Excel.</p>
+  </div>
+
+  <div class="grid-reportes">
+
+    <!-- Reporte de movimientos -->
+    <div mat-card class="tarjeta-reporte">
+      <div class="encabezado-tarjeta">
+        <mat-icon>receipt_long</mat-icon>
+        <h3>Movimientos por rango de fechas</h3>
+      </div>
+      <p class="descripcion-tarjeta">Ingresos, salidas, devoluciones y transferencias en el periodo seleccionado.</p>
+
+      <form [formGroup]="formMovimientos" class="formulario-reporte">
+        <div class="fila-doble">
+          <mat-form-field appearance="outline">
+            <mat-label>Desde</mat-label>
+            <input matInput [matDatepicker]="pickerDesde" formControlName="desde">
+            <mat-datepicker-toggle matSuffix [for]="pickerDesde"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDesde></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Hasta</mat-label>
+            <input matInput [matDatepicker]="pickerHasta" formControlName="hasta">
+            <mat-datepicker-toggle matSuffix [for]="pickerHasta"></mat-datepicker-toggle>
+            <mat-datepicker #pickerHasta></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Material (opcional)</mat-label>
+          <mat-select formControlName="materialId">
+            <mat-option [value]="null">Todos los materiales</mat-option>
+            @for (material of materiales(); track material.id) {
+              <mat-option [value]="material.id">{{ material.sku }} — {{ material.nombre }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </form>
+
+      <div class="botones-descarga">
+        <button mat-stroked-button (click)="descargarMovimientos('pdf')" [disabled]="formMovimientos.invalid || !!generando()">
+          @if (generando() === 'movimientos-pdf') {
+            <mat-icon class="girando">autorenew</mat-icon>
+          } @else {
+            <mat-icon>picture_as_pdf</mat-icon>
+          }
+          PDF
+        </button>
+        <button mat-flat-button color="primary" (click)="descargarMovimientos('excel')" [disabled]="formMovimientos.invalid || !!generando()">
+          @if (generando() === 'movimientos-excel') {
+            <mat-icon class="girando">autorenew</mat-icon>
+          } @else {
+            <mat-icon>table_chart</mat-icon>
+          }
+          Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Kardex de un material -->
+    <div mat-card class="tarjeta-reporte">
+      <div class="encabezado-tarjeta">
+        <mat-icon>inventory_2</mat-icon>
+        <h3>Kardex de un material</h3>
+      </div>
+      <p class="descripcion-tarjeta">Historial completo de entradas y salidas de un material específico.</p>
+
+      <form [formGroup]="formKardex" class="formulario-reporte">
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>Material</mat-label>
+          <mat-select formControlName="materialId">
+            @for (material of materiales(); track material.id) {
+              <mat-option [value]="material.id">{{ material.sku }} — {{ material.nombre }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </form>
+
+      <div class="botones-descarga">
+        <button mat-stroked-button (click)="descargarKardex('pdf')" [disabled]="formKardex.invalid || !!generando()">
+          @if (generando() === 'kardex-pdf') {
+            <mat-icon class="girando">autorenew</mat-icon>
+          } @else {
+            <mat-icon>picture_as_pdf</mat-icon>
+          }
+          PDF
+        </button>
+        <button mat-flat-button color="primary" (click)="descargarKardex('excel')" [disabled]="formKardex.invalid || !!generando()">
+          @if (generando() === 'kardex-excel') {
+            <mat-icon class="girando">autorenew</mat-icon>
+          } @else {
+            <mat-icon>table_chart</mat-icon>
+          }
+          Excel
+        </button>
+      </div>
+    </div>
+
+    <!-- Stock actual -->
+    <div mat-card class="tarjeta-reporte">
+      <div class="encabezado-tarjeta">
+        <mat-icon>warehouse</mat-icon>
+        <h3>Stock actual</h3>
+      </div>
+      <p class="descripcion-tarjeta">Foto completa del stock de todos los materiales, en todas las ubicaciones, en este momento.</p>
+
+      <div class="botones-descarga botones-descarga-solo">
+        <button mat-flat-button color="primary" (click)="descargarStock()" [disabled]="!!generando()">
+          @if (generando() === 'stock-excel') {
+            <mat-icon class="girando">autorenew</mat-icon>
+          } @else {
+            <mat-icon>table_chart</mat-icon>
+          }
+          Descargar Excel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

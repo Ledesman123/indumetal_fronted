@@ -1,0 +1,90 @@
+.contenedor {
+  padding: 28px 32px;
+}
+
+.encabezado-pagina {
+  margin-bottom: 24px;
+
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
+  p { color: #767e8c; margin: 0; font-size: 14px; }
+}
+
+.grid-reportes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.tarjeta-reporte {
+  background: white;
+  border-radius: 10px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.encabezado-tarjeta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+
+  mat-icon {
+    color: #1c5fd1;
+  }
+
+  h3 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1f2b;
+  }
+}
+
+.descripcion-tarjeta {
+  font-size: 13px;
+  color: #888;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.formulario-reporte {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.campo-completo {
+  width: 100%;
+}
+
+.fila-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.botones-descarga {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+
+  button {
+    flex: 1;
+  }
+}
+
+.botones-descarga-solo button {
+  flex: none;
+  width: 100%;
+}
+
+.girando {
+  animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
