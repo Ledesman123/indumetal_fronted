@@ -1,0 +1,54 @@
+.contenedor {
+  padding: 28px 32px;
+}
+
+.encabezado-pagina {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
+  p { color: #767e8c; margin: 0; font-size: 14px; }
+}
+
+.aviso-en-proceso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff8e1;
+  color: #8a6d00;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 13px;
+}
+
+.tabla-envoltorio {
+  overflow-x: auto;
+  border-radius: 8px;
+  background: white;
+
+  table { width: 100%; }
+}
+
+.chip {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.chip-proceso { background: #fff8e1; color: #8a6d00; }
+.chip-cerrado { background: #e6f4ea; color: #1e7e34; }
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 48px 0;
+  color: #999;
+
+  mat-icon { font-size: 40px; width: 40px; height: 40px; }
+}

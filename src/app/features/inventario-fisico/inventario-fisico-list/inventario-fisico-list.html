@@ -1,0 +1,76 @@
+<div class="contenedor">
+  <div class="encabezado-pagina">
+    <div>
+      <h2>Inventario físico</h2>
+      <p>Realiza el conteo periódico del almacén y ajusta diferencias contra el sistema.</p>
+    </div>
+
+    <button mat-flat-button color="primary" (click)="iniciarInventario()" [disabled]="iniciando() || hayInventarioEnProceso()">
+      <mat-icon>playlist_add_check</mat-icon>
+      Iniciar inventario
+    </button>
+  </div>
+
+  @if (hayInventarioEnProceso()) {
+    <div class="aviso-en-proceso">
+      <mat-icon>info</mat-icon>
+      <span>Ya hay un inventario en proceso. Complétalo o ciérralo antes de iniciar otro.</span>
+    </div>
+  }
+
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <div class="tabla-envoltorio mat-elevation-z2">
+    <table mat-table [dataSource]="inventarios()">
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>N°</th>
+        <td mat-cell *matCellDef="let inv">#{{ inv.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaInicio">
+        <th mat-header-cell *matHeaderCellDef>Fecha de inicio</th>
+        <td mat-cell *matCellDef="let inv">{{ inv.fechaInicio | date:'dd/MM/yy HH:mm' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaCierre">
+        <th mat-header-cell *matHeaderCellDef>Fecha de cierre</th>
+        <td mat-cell *matCellDef="let inv">{{ inv.fechaCierre ? (inv.fechaCierre | date:'dd/MM/yy HH:mm') : '—' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="responsable">
+        <th mat-header-cell *matHeaderCellDef>Responsable</th>
+        <td mat-cell *matCellDef="let inv">{{ inv.responsable }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Estado</th>
+        <td mat-cell *matCellDef="let inv">
+          <span class="chip" [class.chip-proceso]="inv.estado === 'EN_PROCESO'" [class.chip-cerrado]="inv.estado === 'CERRADO'">
+            {{ inv.estado === 'EN_PROCESO' ? 'En proceso' : 'Cerrado' }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let inv">
+          <button mat-button color="primary" (click)="abrir(inv)">
+            {{ inv.estado === 'EN_PROCESO' ? 'Continuar conteo' : 'Ver detalle' }}
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+    </table>
+
+    @if (!cargando() && inventarios().length === 0) {
+      <div class="estado-vacio">
+        <mat-icon>playlist_add_check</mat-icon>
+        <p>Todavía no se ha realizado ningún inventario físico.</p>
+      </div>
+    }
+  </div>
+</div>

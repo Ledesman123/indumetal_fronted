@@ -12,6 +12,8 @@ export const routes: Routes = [
       { path: 'materiales', loadComponent: () => import('./features/materiales/materiales-list/materiales-list').then(m => m.MaterialesList) },
       { path: 'movimientos', loadComponent: () => import('./features/movimientos/movimientos').then(m => m.Movimientos) },
       { path: 'almacenes', loadComponent: () => import('./features/almacenes/almacenes-list/almacenes-list').then(m => m.AlmacenesList) },
+      { path: 'inventario-fisico', loadComponent: () => import('./features/inventario-fisico/inventario-fisico-list/inventario-fisico-list').then(m => m.InventarioFisicoList) },
+      { path: 'inventario-fisico/:id', loadComponent: () => import('./features/inventario-fisico/inventario-fisico-detalle/inventario-fisico-detalle').then(m => m.InventarioFisicoDetalle) },
       { path: 'stock', loadComponent: () => import('./features/stock/stock').then(m => m.Stock) },
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
     ]
