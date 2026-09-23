@@ -1,0 +1,103 @@
+.contenedor {
+  padding: 28px 32px;
+}
+
+.encabezado-pagina {
+  margin-bottom: 24px;
+
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
+  p { color: #767e8c; margin: 0; font-size: 14px; }
+}
+
+.panel-formulario, .panel-historial {
+  background: white;
+  border-radius: 10px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+}
+
+.panel-historial h3 {
+  margin: 0 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1a1f2b;
+}
+
+.selector-tipo {
+  display: flex;
+  margin-bottom: 20px;
+
+  ::ng-deep .mat-button-toggle {
+    flex: 1;
+  }
+
+  ::ng-deep .mat-button-toggle-checked {
+    background: #e8f0fe;
+    color: #1c5fd1;
+  }
+
+  mat-icon {
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+}
+
+.formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 640px;
+}
+
+.campo-completo {
+  width: 100%;
+}
+
+.fila-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.boton-registrar {
+  height: 44px;
+  margin-top: 8px;
+  align-self: flex-start;
+  min-width: 200px;
+}
+
+.mensaje {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.mensaje-error { color: #b3261e; background: #fdecea; }
+.mensaje-exito { color: #1e7e34; background: #e6f4ea; }
+
+.chip-tipo {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.tipo-ingreso { background: #e6f4ea; color: #1e7e34; }
+.tipo-salida { background: #fdecea; color: #b3261e; }
+.tipo-devolucion { background: #e8f0fe; color: #1c5fd1; }
+.tipo-transferencia { background: #f1e9fb; color: #6a3fb8; }
+
+.estado-vacio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px 0;
+  color: #999;
+
+  mat-icon { font-size: 36px; width: 36px; height: 36px; }
+}

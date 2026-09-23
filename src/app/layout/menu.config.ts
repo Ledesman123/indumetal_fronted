@@ -4,20 +4,28 @@ export const MENU_POR_ROL: Record<string, MenuItem[]> = {
   ADMINISTRADOR: [
     { etiqueta: 'Panel', icono: 'dashboard', ruta: '/dashboard' },
     { etiqueta: 'Materiales', icono: 'category', ruta: '/materiales' },
-    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' }
+    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' },
+    { etiqueta: 'Movimientos', icono: 'swap_horiz', ruta: '/movimientos' },
+    { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' }
   ],
   SUPERVISOR_ALMACEN: [
     { etiqueta: 'Panel', icono: 'dashboard', ruta: '/dashboard' },
     { etiqueta: 'Materiales', icono: 'category', ruta: '/materiales' },
-    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' }
+    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' },
+    { etiqueta: 'Movimientos', icono: 'swap_horiz', ruta: '/movimientos' },
+    { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' }
   ],
   JEFE_PRODUCCION: [
     { etiqueta: 'Panel', icono: 'dashboard', ruta: '/dashboard' },
     { etiqueta: 'Materiales', icono: 'category', ruta: '/materiales' },
-    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' }
+    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' },
+    { etiqueta: 'Movimientos', icono: 'swap_horiz', ruta: '/movimientos' },
+    { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' }
   ],
   ALMACENERO: [
     { etiqueta: 'Materiales', icono: 'category', ruta: '/materiales' },
-    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' }
+    { etiqueta: 'Almacenes', icono: 'warehouse', ruta: '/almacenes' },
+    { etiqueta: 'Movimientos', icono: 'swap_horiz', ruta: '/movimientos' },
+    { etiqueta: 'Stock', icono: 'inventory', ruta: '/stock' }
   ]
 };

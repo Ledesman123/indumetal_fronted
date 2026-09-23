@@ -1,0 +1,213 @@
+<div class="contenedor">
+  <div class="encabezado-pagina">
+    <h2>Movimientos de almacén</h2>
+    <p>Registra ingresos, salidas, devoluciones y transferencias de materiales.</p>
+  </div>
+
+  <div mat-card class="panel-formulario">
+
+    <mat-button-toggle-group
+      class="selector-tipo"
+      [value]="tipoSeleccionado()"
+      (change)="cambiarTipo($event.value)">
+      <mat-button-toggle value="INGRESO">
+        <mat-icon>call_received</mat-icon> Ingreso
+      </mat-button-toggle>
+      <mat-button-toggle value="SALIDA">
+        <mat-icon>call_made</mat-icon> Salida
+      </mat-button-toggle>
+      <mat-button-toggle value="DEVOLUCION">
+        <mat-icon>undo</mat-icon> Devolución
+      </mat-button-toggle>
+      <mat-button-toggle value="TRANSFERENCIA">
+        <mat-icon>swap_horiz</mat-icon> Transferencia
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    @if (error()) {
+      <div class="mensaje mensaje-error">
+        <mat-icon>error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </div>
+    }
+    @if (exito()) {
+      <div class="mensaje mensaje-exito">
+        <mat-icon>check_circle</mat-icon>
+        <span>{{ exito() }}</span>
+      </div>
+    }
+
+    <form [formGroup]="form" class="formulario" (ngSubmit)="registrar()">
+
+      <mat-form-field appearance="outline" class="campo-completo">
+        <mat-label>Material</mat-label>
+        <mat-select formControlName="materialId">
+          @for (material of materiales(); track material.id) {
+            <mat-option [value]="material.id">{{ material.sku }} — {{ material.nombre }}</mat-option>
+          }
+        </mat-select>
+        @if (form.get('materialId')?.hasError('required')) {
+          <mat-error>Selecciona un material</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Ubicacion: opcional en INGRESO (RF-07), obligatoria en el resto -->
+      @if (!esTransferencia) {
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-label>{{ esIngreso ? 'Ubicación (opcional — automática si se deja vacío)' : 'Ubicación' }}</mat-label>
+          <mat-select formControlName="ubicacionId">
+            @if (esIngreso) {
+              <mat-option [value]="null">Asignación automática</mat-option>
+            }
+            @for (ubicacion of ubicaciones(); track ubicacion.id) {
+              <mat-option [value]="ubicacion.id">{{ ubicacion.codigo }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      }
+
+      @if (esTransferencia) {
+        <div class="fila-doble">
+          <mat-form-field appearance="outline">
+            <mat-label>Ubicación origen</mat-label>
+            <mat-select formControlName="ubicacionId">
+              @for (ubicacion of ubicaciones(); track ubicacion.id) {
+                <mat-option [value]="ubicacion.id">{{ ubicacion.codigo }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ubicación destino</mat-label>
+            <mat-select formControlName="ubicacionDestinoId">
+              @for (ubicacion of ubicaciones(); track ubicacion.id) {
+                <mat-option [value]="ubicacion.id">{{ ubicacion.codigo }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      }
+
+      <mat-form-field appearance="outline" class="campo-completo">
+        <mat-label>Cantidad</mat-label>
+        <input matInput type="number" formControlName="cantidad" min="0.01" step="0.01">
+        @if (form.get('cantidad')?.hasError('required')) {
+          <mat-error>La cantidad es obligatoria</mat-error>
+        }
+        @if (form.get('cantidad')?.hasError('min')) {
+          <mat-error>Debe ser mayor a 0</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Campos especificos por tipo -->
+      @if (esIngreso) {
+        <div class="fila-doble">
+          <mat-form-field appearance="outline">
+            <mat-label>Lote (opcional)</mat-label>
+            <input matInput formControlName="lote">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha de vencimiento (opcional)</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fechaVencimiento">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="fila-doble">
+          <mat-form-field appearance="outline">
+            <mat-label>Orden de compra (opcional)</mat-label>
+            <input matInput formControlName="ordenCompra">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Proveedor (opcional)</mat-label>
+            <input matInput formControlName="proveedor">
+          </mat-form-field>
+        </div>
+      }
+
+      @if (esSalida || esDevolucion) {
+        <div class="fila-doble">
+          <mat-form-field appearance="outline">
+            <mat-label>Orden de producción (opcional)</mat-label>
+            <input matInput formControlName="ordenProduccion">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ esSalida ? 'Área solicitante (opcional)' : 'Motivo de la devolución (opcional)' }}</mat-label>
+            <input matInput formControlName="areaSolicitante">
+          </mat-form-field>
+        </div>
+      }
+
+      <button mat-flat-button color="primary" type="submit" class="boton-registrar" [disabled]="cargando() || form.invalid">
+        @if (cargando()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          Registrar {{ etiquetaTipo(tipoSeleccionado()).toLowerCase() }}
+        }
+      </button>
+    </form>
+  </div>
+
+  <div mat-card class="panel-historial">
+    <h3>Historial de movimientos</h3>
+
+    @if (cargandoHistorial()) {
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    }
+
+    <table mat-table [dataSource]="historial()">
+      <ng-container matColumnDef="fecha">
+        <th mat-header-cell *matHeaderCellDef>Fecha</th>
+        <td mat-cell *matCellDef="let m">{{ m.creadoEn | date:'dd/MM/yy HH:mm' }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo">
+        <th mat-header-cell *matHeaderCellDef>Tipo</th>
+        <td mat-cell *matCellDef="let m">
+          <span class="chip-tipo" [ngClass]="'tipo-' + m.tipo.toLowerCase()">{{ etiquetaTipo(m.tipo) }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="material">
+        <th mat-header-cell *matHeaderCellDef>Material</th>
+        <td mat-cell *matCellDef="let m">{{ m.materialSku }} — {{ m.materialNombre }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="ubicacion">
+        <th mat-header-cell *matHeaderCellDef>Ubicación</th>
+        <td mat-cell *matCellDef="let m">
+          {{ m.tipo === 'TRANSFERENCIA' ? (m.ubicacionCodigo + ' → ' + m.ubicacionDestinoCodigo) : m.ubicacionCodigo }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cantidad">
+        <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+        <td mat-cell *matCellDef="let m">{{ m.cantidad }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="saldo">
+        <th mat-header-cell *matHeaderCellDef>Saldo resultante</th>
+        <td mat-cell *matCellDef="let m">{{ m.saldoResultante }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="usuario">
+        <th mat-header-cell *matHeaderCellDef>Usuario</th>
+        <td mat-cell *matCellDef="let m">{{ m.usuario }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnasHistorial"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnasHistorial;"></tr>
+    </table>
+
+    @if (!cargandoHistorial() && historial().length === 0) {
+      <div class="estado-vacio">
+        <mat-icon>receipt_long</mat-icon>
+        <p>Todavía no hay movimientos registrados.</p>
+      </div>
+    }
+  </div>
+</div>

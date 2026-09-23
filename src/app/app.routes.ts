@@ -10,7 +10,9 @@ export const routes: Routes = [
     children: [
       { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard) },
       { path: 'materiales', loadComponent: () => import('./features/materiales/materiales-list/materiales-list').then(m => m.MaterialesList) },
+      { path: 'movimientos', loadComponent: () => import('./features/movimientos/movimientos').then(m => m.Movimientos) },
       { path: 'almacenes', loadComponent: () => import('./features/almacenes/almacenes-list/almacenes-list').then(m => m.AlmacenesList) },
+      { path: 'stock', loadComponent: () => import('./features/stock/stock').then(m => m.Stock) },
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
     ]
   },
