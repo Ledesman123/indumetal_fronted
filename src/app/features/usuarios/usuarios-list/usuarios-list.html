@@ -1,0 +1,62 @@
+<div class="contenedor">
+  <div class="encabezado-pagina">
+    <div>
+      <h2>Usuarios</h2>
+      <p>Gestiona las cuentas del sistema y sus roles.</p>
+    </div>
+    <button mat-flat-button color="primary" (click)="nuevoUsuario()">
+      <mat-icon>person_add</mat-icon>
+      Nuevo usuario
+    </button>
+  </div>
+
+  @if (cargando()) {
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  }
+
+  <div class="tabla-envoltorio mat-elevation-z2">
+    <table mat-table [dataSource]="usuarios()">
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let usuario">
+          <div class="fila-nombre">
+            <div class="avatar-usuario">{{ usuario.nombres.charAt(0) }}{{ usuario.apellidos.charAt(0) }}</div>
+            <span>{{ usuario.nombres }} {{ usuario.apellidos }}</span>
+          </div>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="correo">
+        <th mat-header-cell *matHeaderCellDef>Correo</th>
+        <td mat-cell *matCellDef="let usuario">{{ usuario.correo }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="rol">
+        <th mat-header-cell *matHeaderCellDef>Rol</th>
+        <td mat-cell *matCellDef="let usuario">
+          <span class="chip-rol">{{ etiquetaRol(usuario.rol) }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef>Activo</th>
+        <td mat-cell *matCellDef="let usuario">
+          <mat-slide-toggle [checked]="usuario.activo" (change)="cambiarEstado(usuario)"></mat-slide-toggle>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="acciones">
+        <th mat-header-cell *matHeaderCellDef>Acciones</th>
+        <td mat-cell *matCellDef="let usuario">
+          <button mat-icon-button (click)="editarUsuario(usuario)" matTooltip="Editar">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+      <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+    </table>
+  </div>
+</div>

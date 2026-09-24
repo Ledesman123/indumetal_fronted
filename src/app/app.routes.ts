@@ -15,6 +15,7 @@ export const routes: Routes = [
       { path: 'inventario-fisico', loadComponent: () => import('./features/inventario-fisico/inventario-fisico-list/inventario-fisico-list').then(m => m.InventarioFisicoList) },
       { path: 'inventario-fisico/:id', loadComponent: () => import('./features/inventario-fisico/inventario-fisico-detalle/inventario-fisico-detalle').then(m => m.InventarioFisicoDetalle) },
       { path: 'reportes', loadComponent: () => import('./features/reportes/reportes').then(m => m.Reportes) }, { path: 'alertas', loadComponent: () => import('./features/alertas/alertas').then(m => m.Alertas) }, { path: 'stock', loadComponent: () => import('./features/stock/stock').then(m => m.Stock) },
+      { path: 'usuarios', loadComponent: () => import('./features/usuarios/usuarios-list/usuarios-list').then(m => m.UsuariosList) },
       { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
     ]
   },
