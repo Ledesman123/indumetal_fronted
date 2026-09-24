@@ -1,53 +1,125 @@
 <div class="pagina-login">
-  <mat-card class="tarjeta-login">
-    <div class="encabezado">
-      <mat-icon class="logo">inventory_2</mat-icon>
-      <h1>INDUMETAL PERÚ</h1>
-      <p>Intranet de Gestión de Almacén</p>
-    </div>
 
-    @if (error()) {
+  <!-- Panel izquierdo: marca e informacion -->
+  <div class="panel-marca">
+    <div class="contenido-marca">
+      <div class="logo-marca">
+        <mat-icon class="icono-logo">warehouse</mat-icon>
+        <div class="texto-logo">
+          <span class="linea-1">INDUMETAL</span>
+          <span class="linea-2">PERÚ</span>
+        </div>
+      </div>
+
+      <div class="separador-marca"></div>
+
+      <h1>Intranet de Gestión<br>de Almacén</h1>
+      <p class="subtitulo-marca">Controla tus operaciones de almacén de forma rápida y segura.</p>
+
+      <div class="lista-caracteristicas">
+        <div class="caracteristica">
+          <div class="icono-caracteristica">
+            <mat-icon>category</mat-icon>
+          </div>
+          <div>
+            <strong>Gestión de inventario</strong>
+            <span>Controla el stock en tiempo real.</span>
+          </div>
+        </div>
+
+        <div class="caracteristica">
+          <div class="icono-caracteristica">
+            <mat-icon>assignment</mat-icon>
+          </div>
+          <div>
+            <strong>Control de almacén</strong>
+            <span>Registra y organiza tus movimientos.</span>
+          </div>
+        </div>
+
+        <div class="caracteristica">
+          <div class="icono-caracteristica">
+            <mat-icon>insights</mat-icon>
+          </div>
+          <div>
+            <strong>Seguimiento de operaciones</strong>
+            <span>Mayor trazabilidad y eficiencia.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Panel derecho: formulario de login -->
+  <div class="panel-formulario-contenedor">
+    <mat-card class="tarjeta-login">
+
+      <div class="logo-marca logo-marca-pequeno">
+        <mat-icon class="icono-logo">warehouse</mat-icon>
+        <div class="texto-logo">
+          <span class="linea-1">INDUMETAL</span>
+          <span class="linea-2">PERÚ</span>
+        </div>
+      </div>
+
+      <h2>Bienvenido de nuevo</h2>
+      <p class="subtitulo-form">Ingresa tus credenciales para continuar.</p>
+
+      @if (error()) {
       <div class="mensaje-error">
         <mat-icon>error_outline</mat-icon>
         <span>{{ error() }}</span>
       </div>
-    }
+      }
 
-    <form [formGroup]="form" (ngSubmit)="ingresar()">
-      <mat-form-field appearance="outline" class="campo-completo">
-        <mat-label>Correo electrónico</mat-label>
-        <input matInput formControlName="correo" type="email" placeholder="admin@indumetal.pe" autocomplete="username">
-        <mat-icon matSuffix>mail_outline</mat-icon>
-        @if (form.get('correo')?.hasError('required')) {
+      <form [formGroup]="form" (ngSubmit)="ingresar()">
+        <label class="etiqueta-campo">Correo electrónico</label>
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-icon matPrefix class="icono-campo">mail_outline</mat-icon>
+          <input matInput formControlName="correo" type="email" placeholder="tu.correo@indumetal.pe"
+            autocomplete="username">
+          @if (form.get('correo')?.hasError('required')) {
           <mat-error>El correo es obligatorio</mat-error>
-        }
-        @if (form.get('correo')?.hasError('email')) {
+          }
+          @if (form.get('correo')?.hasError('email')) {
           <mat-error>Ingresa un correo válido</mat-error>
-        }
-      </mat-form-field>
+          }
+        </mat-form-field>
 
-      <mat-form-field appearance="outline" class="campo-completo">
-        <mat-label>Contraseña</mat-label>
-        <input matInput formControlName="password" [type]="ocultarPassword() ? 'password' : 'text'" autocomplete="current-password">
-        <button mat-icon-button matSuffix type="button" (click)="ocultarPassword.set(!ocultarPassword())">
-          <mat-icon>{{ ocultarPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        @if (form.get('password')?.hasError('required')) {
+        <label class="etiqueta-campo">Contraseña</label>
+        <mat-form-field appearance="outline" class="campo-completo">
+          <mat-icon matPrefix class="icono-campo">lock_outline</mat-icon>
+          <input matInput formControlName="password" [type]="ocultarPassword() ? 'password' : 'text'"
+            autocomplete="current-password">
+          <button mat-icon-button matSuffix type="button" (click)="ocultarPassword.set(!ocultarPassword())">
+            <mat-icon>{{ ocultarPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          @if (form.get('password')?.hasError('required')) {
           <mat-error>La contraseña es obligatoria</mat-error>
-        }
-      </mat-form-field>
+          }
+        </mat-form-field>
 
-      <button mat-flat-button color="primary" type="submit" class="boton-ingresar" [disabled]="cargando() || form.invalid">
-        @if (cargando()) {
+        <button mat-flat-button color="primary" type="submit" class="boton-ingresar"
+          [disabled]="cargando() || form.invalid">
+          @if (cargando()) {
           <mat-spinner diameter="22"></mat-spinner>
-        } @else {
-          Ingresar
-        }
-      </button>
-    </form>
+          } @else {
+          <ng-container>Ingresar <mat-icon>arrow_forward</mat-icon></ng-container>
+          }
+        </button>
+      </form>
 
-    <button mat-button class="enlace-olvide" (click)="abrirRecuperarPassword()">
-      ¿Olvidaste tu contraseña?
-    </button>
-  </mat-card>
+      <button mat-button class="enlace-olvide" (click)="abrirRecuperarPassword()">
+        ¿Olvidaste tu contraseña?
+      </button>
+
+      <div class="pie-tarjeta">
+        <mat-icon>verified_user</mat-icon>
+        <div>
+          <span>© 2026 Indumetal Perú</span>
+          <span>Sistema interno de gestión de almacén</span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
 </div>
