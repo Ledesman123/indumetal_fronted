@@ -1,18 +1,12 @@
 .contenedor {
-  padding: 24px;
+  padding: 28px 32px;
 }
 
 .encabezado-pagina {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 
-  h2 {
-    margin: 0 0 4px;
-  }
-
-  p {
-    color: #777;
-    margin: 0;
-  }
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
+  p { color: #767e8c; margin: 0; font-size: 14px; }
 }
 
 .barra-acciones {
@@ -70,7 +64,7 @@
 }
 
 .nombre-material {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .descripcion-material {

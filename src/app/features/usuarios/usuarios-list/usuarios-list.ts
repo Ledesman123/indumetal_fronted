@@ -9,12 +9,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Usuario, ROLES_DISPONIBLES } from '../../../core/models/usuario.model';
 import { UsuarioService } from '../../../core/services/usuario.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { UsuarioFormDialog } from '../usuario-form-dialog/usuario-form-dialog';
 
 @Component({
   selector: 'app-usuarios-list',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatSlideToggleModule, MatProgressBarModule],
+  imports: [CommonModule, MatTableModule, MatButtonModule, MatIconModule, MatSlideToggleModule, MatProgressBarModule, MatTooltipModule],
   templateUrl: './usuarios-list.html',
   styleUrl: './usuarios-list.scss'
 })
