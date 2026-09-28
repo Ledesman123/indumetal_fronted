@@ -13,6 +13,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../core/services/auth.service';
 import { MENU_POR_ROL } from '../menu.config';
 import { MenuItem } from '../menu-item.model';
+import { ROLES_DISPONIBLES } from '../../core/models/usuario.model';
 
 // Modulos que se muestran primero en la barra inferior del telefono (los mas usados en campo).
 const RUTAS_PRIORITARIAS_TELEFONO = ['/dashboard', '/movimientos', '/stock', '/materiales'];
@@ -71,7 +72,11 @@ export class AppLayout {
   }
 
   get sesion() {
+
     return this.authService.obtenerSesion()();
+  }
+  etiquetaRol(rol: string | null | undefined): string {
+    return ROLES_DISPONIBLES.find((r) => r.valor === rol)?.etiqueta ?? rol ?? '';
   }
 
   // Items que van directo en la barra inferior. Si el rol tiene pocos modulos, van todos.

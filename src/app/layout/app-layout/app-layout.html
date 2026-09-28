@@ -1,9 +1,6 @@
 <mat-sidenav-container class="contenedor-layout">
 
-  <mat-sidenav
-    [mode]="esMovil() ? 'over' : 'side'"
-    [(opened)]="sidebarAbierto"
-    class="sidebar">
+  <mat-sidenav [mode]="esMovil() ? 'over' : 'side'" [(opened)]="sidebarAbierto" class="sidebar">
 
     <div class="marca">
       <mat-icon class="logo-icono">inventory_2</mat-icon>
@@ -15,10 +12,10 @@
 
     <nav class="lista-menu">
       @for (item of menuActual; track item.ruta) {
-        <a class="item-menu" [routerLink]="item.ruta" routerLinkActive="item-activo" (click)="cerrarEnMovil()">
-          <mat-icon>{{ item.icono }}</mat-icon>
-          <span>{{ item.etiqueta }}</span>
-        </a>
+      <a class="item-menu" [routerLink]="item.ruta" routerLinkActive="item-activo" (click)="cerrarEnMovil()">
+        <mat-icon>{{ item.icono }}</mat-icon>
+        <span>{{ item.etiqueta }}</span>
+      </a>
       }
     </nav>
 
@@ -31,19 +28,20 @@
 
     <mat-toolbar class="header">
       @if (!esTelefono()) {
-        <button mat-icon-button (click)="toggleSidebar()" matTooltip="Mostrar u ocultar menú">
-          <mat-icon>menu</mat-icon>
-        </button>
+      <button mat-icon-button (click)="toggleSidebar()" matTooltip="Mostrar u ocultar menú">
+        <mat-icon>menu</mat-icon>
+      </button>
       } @else {
-        <div class="marca-header">
-          <mat-icon>inventory_2</mat-icon>
-          <strong>INDUMETAL</strong>
-        </div>
+      <div class="marca-header">
+        <mat-icon>inventory_2</mat-icon>
+        <strong>INDUMETAL</strong>
+      </div>
       }
 
       <span class="espaciador"></span>
 
-      <button mat-icon-button matTooltip="Notificaciones" matBadge="0" matBadgeSize="small" matBadgeColor="warn" [matBadgeHidden]="true">
+      <button mat-icon-button matTooltip="Notificaciones" matBadge="0" matBadgeSize="small" matBadgeColor="warn"
+        [matBadgeHidden]="true">
         <mat-icon>notifications_none</mat-icon>
       </button>
 
@@ -55,12 +53,20 @@
         <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
         <div class="datos-usuario">
           <span class="nombre">{{ sesion?.nombreCompleto }}</span>
-          <span class="rol-usuario">{{ sesion?.rol }}</span>
+          <span class="rol-usuario">{{ etiquetaRol(sesion?.rol) }}</span>
         </div>
         <mat-icon>arrow_drop_down</mat-icon>
       </button>
 
       <mat-menu #menuUsuario="matMenu">
+        <div class="cabecera-menu-usuario" (click)="$event.stopPropagation()">
+          <div class="avatar avatar-grande">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
+          <div class="datos-cabecera">
+            <strong>{{ sesion?.nombreCompleto }}</strong>
+            <span>{{ etiquetaRol(sesion?.rol) }}</span>
+          </div>
+        </div>
+
         <button mat-menu-item (click)="authService.logout()">
           <mat-icon>logout</mat-icon>
           <span>Cerrar sesión</span>
@@ -78,21 +84,21 @@
 
     <!-- Barra inferior estilo app nativa (solo telefono) -->
     @if (esTelefono()) {
-      <nav class="barra-inferior">
-        @for (item of itemsBarra; track item.ruta) {
-          <a class="tab" [routerLink]="item.ruta" routerLinkActive="tab-activo" (click)="cerrarMas()">
-            <mat-icon>{{ item.icono }}</mat-icon>
-            <span>{{ item.etiqueta }}</span>
-          </a>
-        }
+    <nav class="barra-inferior">
+      @for (item of itemsBarra; track item.ruta) {
+      <a class="tab" [routerLink]="item.ruta" routerLinkActive="tab-activo" (click)="cerrarMas()">
+        <mat-icon>{{ item.icono }}</mat-icon>
+        <span>{{ item.etiqueta }}</span>
+      </a>
+      }
 
-        @if (itemsMas.length > 0) {
-          <button type="button" class="tab" [class.tab-activo]="masActivo || masAbierto()" (click)="toggleMas()">
-            <mat-icon>apps</mat-icon>
-            <span>Más</span>
-          </button>
-        }
-      </nav>
+      @if (itemsMas.length > 0) {
+      <button type="button" class="tab" [class.tab-activo]="masActivo || masAbierto()" (click)="toggleMas()">
+        <mat-icon>apps</mat-icon>
+        <span>Más</span>
+      </button>
+      }
+    </nav>
     }
 
   </mat-sidenav-content>
@@ -100,31 +106,31 @@
 
 <!-- Panel "Mas" deslizable desde abajo (solo telefono). Va fuera del contenedor para que position: fixed cubra toda la pantalla. -->
 @if (esTelefono() && masAbierto()) {
-  <div class="fondo-mas" (click)="cerrarMas()"></div>
+<div class="fondo-mas" (click)="cerrarMas()"></div>
 
-  <div class="panel-mas">
-    <div class="asa"></div>
+<div class="panel-mas">
+  <div class="asa"></div>
 
-    <div class="usuario-mas">
-      <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
-      <div class="datos-usuario">
-        <span class="nombre">{{ sesion?.nombreCompleto }}</span>
-        <span class="rol-usuario">{{ sesion?.rol }}</span>
-      </div>
+  <div class="usuario-mas">
+    <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
+    <div class="datos-usuario">
+      <span class="nombre">{{ sesion?.nombreCompleto }}</span>
+      <span class="rol-usuario">{{ sesion?.rol }}</span>
     </div>
-
-    <div class="grid-mas">
-      @for (item of itemsMas; track item.ruta) {
-        <a class="opcion-mas" [routerLink]="item.ruta" routerLinkActive="opcion-activa" (click)="cerrarMas()">
-          <mat-icon>{{ item.icono }}</mat-icon>
-          <span>{{ item.etiqueta }}</span>
-        </a>
-      }
-    </div>
-
-    <button type="button" class="cerrar-sesion-mas" (click)="cerrarSesionDesdeMas()">
-      <mat-icon>logout</mat-icon>
-      Cerrar sesión
-    </button>
   </div>
+
+  <div class="grid-mas">
+    @for (item of itemsMas; track item.ruta) {
+    <a class="opcion-mas" [routerLink]="item.ruta" routerLinkActive="opcion-activa" (click)="cerrarMas()">
+      <mat-icon>{{ item.icono }}</mat-icon>
+      <span>{{ item.etiqueta }}</span>
+    </a>
+    }
+  </div>
+
+  <button type="button" class="cerrar-sesion-mas" (click)="cerrarSesionDesdeMas()">
+    <mat-icon>logout</mat-icon>
+    Cerrar sesión
+  </button>
+</div>
 }

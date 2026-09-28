@@ -80,3 +80,18 @@ body {
     padding: 16px !important;
   }
 }
+/* ===== Entrada suave de cada pantalla ===== */
+.area-contenido > * {
+  animation: entrada-pantalla 0.25s ease-out;
+}
+
+@keyframes entrada-pantalla {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
