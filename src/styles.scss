@@ -74,3 +74,9 @@ body {
     border-bottom: none;
   }
 }
+/* ===== Pantallas chicas ===== */
+@media (max-width: 700px) {
+  .contenedor {
+    padding: 16px !important;
+  }
+}
