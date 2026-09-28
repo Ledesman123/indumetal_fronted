@@ -72,7 +72,6 @@ export class AppLayout {
   }
 
   get sesion() {
-
     return this.authService.obtenerSesion()();
   }
   etiquetaRol(rol: string | null | undefined): string {
