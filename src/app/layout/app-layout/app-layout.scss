@@ -1,6 +1,9 @@
 .contenedor-layout {
+  width: 100%;
   height: 100vh;
-  height: 100dvh; // en celulares evita que la barra del navegador tape el pie de pagina
+  height: 100dvh;
+  overflow: hidden;
+  background: #f4f6f9;
 }
 
 .sidebar {
@@ -9,7 +12,6 @@
   color: #dde3ec;
   border-right: none;
 
-  // Hace que el pie de version quede pegado abajo del sidebar.
   ::ng-deep .mat-drawer-inner-container {
     display: flex;
     flex-direction: column;
@@ -18,35 +20,23 @@
 
 .marca {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 22px 16px;
+  gap: 6px;
+  padding: 20px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.logo-icono {
-  color: #5b9dff;
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
+.imagen-logo {
+  width: 100%;
+  max-width: 160px;
+  height: auto;
 }
 
-.marca-texto {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.25;
-
-  strong {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    color: #ffffff;
-  }
-
-  span {
-    font-size: 11px;
-    color: #8b96a8;
-  }
+.subtitulo-marca-sidebar {
+  font-size: 11px;
+  color: #8b96a8;
+  letter-spacing: 0.5px;
 }
 
 .lista-menu {
@@ -100,6 +90,8 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .header {
@@ -113,18 +105,11 @@
 .marca-header {
   display: flex;
   align-items: center;
-  gap: 8px;
+}
 
-  mat-icon {
-    color: #1c5fd1;
-  }
-
-  strong {
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 0.5px;
-    color: #0f1f33;
-  }
+.imagen-logo-header {
+  height: 32px;
+  width: auto;
 }
 
 .espaciador {
@@ -190,43 +175,50 @@
 // ---------- Barra inferior (telefono) ----------
 
 .barra-inferior {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 64px;
   display: flex;
-  flex-shrink: 0;
-  background: #0f1f33;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: stretch;
+  background: rgba(15, 31, 51, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   padding-bottom: env(safe-area-inset-bottom);
+  z-index: 999;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.12);
 }
 
 .tab {
   position: relative;
   flex: 1;
   min-width: 0;
-  height: 60px;
+  height: 64px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
-  background: none;
+  gap: 3px;
+  background: transparent;
   border: none;
   padding: 0;
   cursor: pointer;
   text-decoration: none;
   font-family: inherit;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.65);
-  transition: color 0.15s;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.15s ease;
 
   mat-icon {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
+    font-size: 23px;
+    width: 23px;
+    height: 23px;
   }
 
   span {
     max-width: 100%;
-    padding: 0 4px;
+    padding: 0 3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -239,9 +231,9 @@
       content: '';
       position: absolute;
       top: 0;
-      width: 32px;
+      width: 30px;
       height: 3px;
-      border-radius: 0 0 3px 3px;
+      border-radius: 0 0 4px 4px;
       background: #5b9dff;
     }
   }
@@ -346,37 +338,8 @@
   to { opacity: 1; }
 }
 
-// ---------- Pantallas chicas ----------
+// ---------- Menu de usuario (header) ----------
 
-@media (max-width: 900px) {
-  .sidebar {
-    width: 260px;
-  }
-}
-
-@media (max-width: 700px) {
-  .datos-usuario,
-  .boton-ayuda {
-    display: none;
-  }
-
-  .pie-pagina {
-    padding: 8px 12px;
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 600px) {
-  // En telefono el pie se oculta: la barra inferior ya ocupa ese lugar.
-  .pie-pagina {
-    display: none;
-  }
-
-  // Dentro del panel "Mas" si queremos ver el nombre y el rol.
-  .usuario-mas .datos-usuario {
-    display: flex;
-  }
-}
 .cabecera-menu-usuario {
   display: flex;
   align-items: center;
@@ -406,5 +369,183 @@
   span {
     font-size: 12px;
     color: #8b96a8;
+  }
+}
+
+// ---------- Paneles flotantes de Notificaciones y Ayuda ----------
+
+::ng-deep .menu-notificaciones,
+::ng-deep .menu-ayuda {
+  max-width: 380px !important;
+  width: 380px;
+  padding: 0 !important;
+}
+
+.cabecera-panel-flotante {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #eef1f5;
+}
+
+.titulo-panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1a1f2b;
+
+  mat-icon {
+    color: #1c5fd1;
+  }
+}
+
+.boton-marcar-leidas {
+  font-size: 12px;
+  color: #1c5fd1;
+}
+
+.item-notificacion {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 10px;
+  padding: 12px 16px !important;
+  height: auto !important;
+  white-space: normal !important;
+  line-height: 1.4;
+  border-bottom: 1px solid #f4f6f9;
+
+  &.no-leida {
+    background: #f4f8ff;
+  }
+}
+
+.punto-no-leida {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+  background: transparent;
+
+  &.visible {
+    background: #1c5fd1;
+  }
+}
+
+.texto-notificacion {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  strong {
+    font-size: 13px;
+    color: #1a1f2b;
+  }
+}
+
+.mensaje-notificacion {
+  font-size: 12px;
+  color: #666;
+}
+
+.fecha-notificacion {
+  font-size: 11px;
+  color: #999;
+  margin-top: 2px;
+}
+
+.estado-vacio-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 32px 16px;
+  color: #999;
+  font-size: 13px;
+
+  mat-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.lista-faq {
+  max-height: 420px;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+
+.item-faq {
+  border-bottom: 1px solid #f4f6f9;
+}
+
+.pregunta-faq {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1f2b;
+  cursor: pointer;
+
+  mat-icon {
+    color: #8b96a8;
+    flex-shrink: 0;
+  }
+}
+
+.respuesta-faq {
+  padding: 0 16px 14px;
+
+  p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #666;
+    line-height: 1.5;
+  }
+}
+
+// ---------- Pantallas chicas ----------
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 260px;
+  }
+}
+
+@media (max-width: 700px) {
+  .datos-usuario,
+  .boton-ayuda {
+    display: none;
+  }
+
+  .pie-pagina {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 600px) {
+  .pie-pagina {
+    display: none;
+  }
+
+  .area-contenido {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .usuario-mas .datos-usuario {
+    display: flex;
   }
 }

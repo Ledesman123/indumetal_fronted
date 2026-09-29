@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -11,11 +11,12 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
 import { AuthService } from '../../core/services/auth.service';
+import { NotificacionesService, NotificacionSimulada } from '../../core/services/notificaciones.service';
 import { MENU_POR_ROL } from '../menu.config';
 import { MenuItem } from '../menu-item.model';
 import { ROLES_DISPONIBLES } from '../../core/models/usuario.model';
+import { PREGUNTAS_FRECUENTES, PreguntaFrecuente } from '../ayuda-contenido';
 
-// Modulos que se muestran primero en la barra inferior del telefono (los mas usados en campo).
 const RUTAS_PRIORITARIAS_TELEFONO = ['/dashboard', '/movimientos', '/stock', '/materiales'];
 const MAX_ITEMS_BARRA = 5;
 
@@ -40,13 +41,20 @@ const MAX_ITEMS_BARRA = 5;
 })
 export class AppLayout {
   authService = inject(AuthService);
+  private notificacionesService = inject(NotificacionesService);
   private breakpoint = inject(BreakpointObserver);
   private router = inject(Router);
 
-  esMovil = signal(false);      // 900px o menos: el menu lateral pasa a modo "sobre el contenido"
-  esTelefono = signal(false);   // 600px o menos: se usa la barra inferior estilo app nativa
+  esMovil = signal(false);
+  esTelefono = signal(false);
   sidebarAbierto = signal(true);
   masAbierto = signal(false);
+
+  notificaciones = this.notificacionesService.listar();
+  cantidadNoLeidas = this.notificacionesService.cantidadNoLeidas;
+
+  preguntasFrecuentes: PreguntaFrecuente[] = PREGUNTAS_FRECUENTES;
+  faqAbierta = signal<number | null>(null);
 
   constructor() {
     this.breakpoint
@@ -74,11 +82,11 @@ export class AppLayout {
   get sesion() {
     return this.authService.obtenerSesion()();
   }
+
   etiquetaRol(rol: string | null | undefined): string {
     return ROLES_DISPONIBLES.find((r) => r.valor === rol)?.etiqueta ?? rol ?? '';
   }
 
-  // Items que van directo en la barra inferior. Si el rol tiene pocos modulos, van todos.
   get itemsBarra(): MenuItem[] {
     const menu = this.menuActual;
     if (menu.length <= MAX_ITEMS_BARRA) return menu;
@@ -91,7 +99,6 @@ export class AppLayout {
     return [...prioritarios, ...resto].slice(0, MAX_ITEMS_BARRA - 1);
   }
 
-  // Items que quedan dentro del panel "Mas".
   get itemsMas(): MenuItem[] {
     const menu = this.menuActual;
     if (menu.length <= MAX_ITEMS_BARRA) return [];
@@ -99,7 +106,6 @@ export class AppLayout {
     return menu.filter((item) => !enBarra.includes(item));
   }
 
-  // El boton "Mas" se ve activo cuando la pantalla actual es una de las que estan dentro de su panel.
   get masActivo(): boolean {
     return this.itemsMas.some((item) =>
       this.router.isActive(item.ruta, {
@@ -130,5 +136,18 @@ export class AppLayout {
   cerrarSesionDesdeMas(): void {
     this.cerrarMas();
     this.authService.logout();
+  }
+
+  irANotificacion(notificacion: NotificacionSimulada): void {
+    this.notificacionesService.marcarComoLeida(notificacion.id);
+    if (notificacion.ruta) this.router.navigate([notificacion.ruta]);
+  }
+
+  marcarTodasComoLeidas(): void {
+    this.notificacionesService.marcarTodasComoLeidas();
+  }
+
+  toggleFaq(id: number): void {
+    this.faqAbierta.set(this.faqAbierta() === id ? null : id);
   }
 }

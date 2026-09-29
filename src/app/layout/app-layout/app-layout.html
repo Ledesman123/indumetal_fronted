@@ -3,11 +3,8 @@
   <mat-sidenav [mode]="esMovil() ? 'over' : 'side'" [(opened)]="sidebarAbierto" class="sidebar">
 
     <div class="marca">
-      <mat-icon class="logo-icono">inventory_2</mat-icon>
-      <div class="marca-texto">
-        <strong>INDUMETAL</strong>
-        <span>Gestión de Almacén</span>
-      </div>
+      <img src="/logo1.png" alt="INDUMETAL PERÚ" class="imagen-logo">
+      <span class="subtitulo-marca-sidebar">Gestión de Almacén</span>
     </div>
 
     <nav class="lista-menu">
@@ -33,21 +30,80 @@
       </button>
       } @else {
       <div class="marca-header">
-        <mat-icon>inventory_2</mat-icon>
-        <strong>INDUMETAL</strong>
+        <img src="/logo1.png" alt="INDUMETAL PERÚ" class="imagen-logo-header">
       </div>
       }
 
       <span class="espaciador"></span>
 
-      <button mat-icon-button matTooltip="Notificaciones" matBadge="0" matBadgeSize="small" matBadgeColor="warn"
-        [matBadgeHidden]="true">
-        <mat-icon>notifications_none</mat-icon>
+      <button mat-icon-button matTooltip="Notificaciones" [matMenuTriggerFor]="menuNotificaciones">
+        <mat-icon
+          [matBadge]="cantidadNoLeidas()"
+          matBadgeSize="small"
+          matBadgeColor="warn"
+          [matBadgeHidden]="cantidadNoLeidas() === 0">
+          notifications_none
+        </mat-icon>
       </button>
 
-      <button mat-icon-button matTooltip="Ayuda" class="boton-ayuda">
+      <mat-menu #menuNotificaciones="matMenu" class="menu-notificaciones">
+        <div class="cabecera-panel-flotante">
+          <div class="titulo-panel">
+            <mat-icon>notifications_none</mat-icon>
+            <span>Notificaciones</span>
+          </div>
+          @if (cantidadNoLeidas() > 0) {
+            <button mat-button class="boton-marcar-leidas" (click)="marcarTodasComoLeidas()">
+              Marcar todas como vistas
+            </button>
+          }
+        </div>
+
+        @for (n of notificaciones(); track n.id) {
+          <button mat-menu-item class="item-notificacion" [class.no-leida]="!n.leida" (click)="irANotificacion(n)">
+            <div class="punto-no-leida" [class.visible]="!n.leida"></div>
+            <div class="texto-notificacion">
+              <strong>{{ n.titulo }}</strong>
+              <span class="mensaje-notificacion">{{ n.mensaje }}</span>
+              <span class="fecha-notificacion">{{ n.fecha | date:'dd/MM HH:mm' }}</span>
+            </div>
+          </button>
+        } @empty {
+          <div class="estado-vacio-panel">
+            <mat-icon>notifications_off</mat-icon>
+            <span>No tienes notificaciones</span>
+          </div>
+        }
+      </mat-menu>
+
+      <button mat-icon-button matTooltip="Ayuda" class="boton-ayuda" [matMenuTriggerFor]="menuAyuda">
         <mat-icon>help_outline</mat-icon>
       </button>
+
+      <mat-menu #menuAyuda="matMenu" class="menu-ayuda">
+        <div class="cabecera-panel-flotante">
+          <div class="titulo-panel">
+            <mat-icon>help_outline</mat-icon>
+            <span>Ayuda rápida</span>
+          </div>
+        </div>
+
+        <div class="lista-faq">
+          @for (item of preguntasFrecuentes; track item.id) {
+            <div class="item-faq">
+              <button type="button" class="pregunta-faq" (click)="toggleFaq(item.id)">
+                <span>{{ item.pregunta }}</span>
+                <mat-icon>{{ faqAbierta() === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              @if (faqAbierta() === item.id) {
+                <div class="respuesta-faq">
+                  <p>{{ item.respuesta }}</p>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </mat-menu>
 
       <button mat-button [matMenuTriggerFor]="menuUsuario" class="boton-usuario">
         <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
@@ -59,7 +115,7 @@
       </button>
 
       <mat-menu #menuUsuario="matMenu">
-        <div class="cabecera-menu-usuario" (click)="$event.stopPropagation()">
+        <div class="cabecera-menu-usuario">
           <div class="avatar avatar-grande">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
           <div class="datos-cabecera">
             <strong>{{ sesion?.nombreCompleto }}</strong>
@@ -82,7 +138,6 @@
       <span>© 2026 INDUMETAL PERÚ S.A.C. — Intranet de Gestión de Almacén</span>
     </footer>
 
-    <!-- Barra inferior estilo app nativa (solo telefono) -->
     @if (esTelefono()) {
     <nav class="barra-inferior">
       @for (item of itemsBarra; track item.ruta) {
@@ -104,7 +159,6 @@
   </mat-sidenav-content>
 </mat-sidenav-container>
 
-<!-- Panel "Mas" deslizable desde abajo (solo telefono). Va fuera del contenedor para que position: fixed cubra toda la pantalla. -->
 @if (esTelefono() && masAbierto()) {
 <div class="fondo-mas" (click)="cerrarMas()"></div>
 
