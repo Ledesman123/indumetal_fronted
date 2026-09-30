@@ -105,13 +105,36 @@
         </div>
       </mat-menu>
 
+      <button mat-icon-button matTooltip="Accesos rápidos" class="boton-accesos" [matMenuTriggerFor]="menuAccesos">
+        <mat-icon>apps</mat-icon>
+      </button>
+
+      <mat-menu #menuAccesos="matMenu" class="menu-accesos">
+        <div class="cabecera-panel-flotante">
+          <div class="titulo-panel">
+            <mat-icon>apps</mat-icon>
+            <span>Accesos rápidos</span>
+          </div>
+        </div>
+
+        <div class="lista-accesos">
+          @for (item of accesosRapidos; track item.ruta) {
+            <a class="item-acceso" [routerLink]="item.ruta">
+              <mat-icon>{{ item.icono }}</mat-icon>
+              <span>{{ item.etiqueta }}</span>
+            </a>
+          }
+        </div>
+      </mat-menu>
+
+      <div class="separador-header"></div>
+
       <button mat-button [matMenuTriggerFor]="menuUsuario" class="boton-usuario">
-        <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
         <div class="datos-usuario">
           <span class="nombre">{{ sesion?.nombreCompleto }}</span>
           <span class="rol-usuario">{{ etiquetaRol(sesion?.rol) }}</span>
         </div>
-        <mat-icon>arrow_drop_down</mat-icon>
+        <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
       </button>
 
       <mat-menu #menuUsuario="matMenu">

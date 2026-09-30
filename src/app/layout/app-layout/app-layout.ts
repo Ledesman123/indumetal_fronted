@@ -105,6 +105,9 @@ export class AppLayout {
     const enBarra = this.itemsBarra;
     return menu.filter((item) => !enBarra.includes(item));
   }
+    get accesosRapidos(): MenuItem[] {
+    return this.menuActual;
+  }
 
   get masActivo(): boolean {
     return this.itemsMas.some((item) =>
