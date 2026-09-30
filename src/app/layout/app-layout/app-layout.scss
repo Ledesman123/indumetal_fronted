@@ -119,8 +119,16 @@
 .boton-usuario {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 14px;
+  padding: 0 4px;
+
+  ::ng-deep .mdc-button__label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
 }
+
 .avatar {
   width: 34px;
   height: 34px;
@@ -347,7 +355,13 @@
   border-bottom: 1px solid #eef1f5;
   cursor: default;
 }
+.opcion-cerrar-sesion {
+  color: #b3261e;
 
+  mat-icon {
+    color: #b3261e;
+  }
+}
 .avatar-grande {
   width: 42px;
   height: 42px;
@@ -370,7 +384,7 @@
   }
 }
 
-// ---------- Paneles flotantes de Notificaciones y Ayuda ----------
+// ---------- Paneles flotantes de Notificaciones, Ayuda y Accesos rapidos ----------
 
 ::ng-deep .menu-notificaciones,
 ::ng-deep .menu-ayuda {
@@ -514,39 +528,6 @@
   }
 }
 
-// ---------- Pantallas chicas ----------
-
-@media (max-width: 900px) {
-  .sidebar {
-    width: 260px;
-  }
-}
-
-@media (max-width: 700px) {
-  .datos-usuario,
-  .boton-ayuda {
-    display: none;
-  }
-
-  .pie-pagina {
-    padding: 8px 12px;
-    font-size: 11px;
-  }
-}
-
-@media (max-width: 600px) {
-  .pie-pagina {
-    display: none;
-  }
-
-  .area-contenido {
-    padding-bottom: calc(76px + env(safe-area-inset-bottom));
-  }
-
-  .usuario-mas .datos-usuario {
-    display: flex;
-  }
-}
 .separador-header {
   width: 1px;
   height: 28px;
@@ -584,5 +565,39 @@
 
   &:hover {
     background: #f4f8ff;
+  }
+}
+
+// ---------- Pantallas chicas ----------
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 260px;
+  }
+}
+
+@media (max-width: 700px) {
+  .datos-usuario,
+  .boton-ayuda {
+    display: none;
+  }
+
+  .pie-pagina {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 600px) {
+  .pie-pagina {
+    display: none;
+  }
+
+  .area-contenido {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom));
+  }
+
+  .usuario-mas .datos-usuario {
+    display: flex;
   }
 }

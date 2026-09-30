@@ -16,7 +16,8 @@ import { MENU_POR_ROL } from '../menu.config';
 import { MenuItem } from '../menu-item.model';
 import { ROLES_DISPONIBLES } from '../../core/models/usuario.model';
 import { PREGUNTAS_FRECUENTES, PreguntaFrecuente } from '../ayuda-contenido';
-
+import { MatDialog } from '@angular/material/dialog';
+import { PerfilDialog } from '../../shared/perfil-dialog/perfil-dialog';
 const RUTAS_PRIORITARIAS_TELEFONO = ['/dashboard', '/movimientos', '/stock', '/materiales'];
 const MAX_ITEMS_BARRA = 5;
 
@@ -44,6 +45,7 @@ export class AppLayout {
   private notificacionesService = inject(NotificacionesService);
   private breakpoint = inject(BreakpointObserver);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
 
   esMovil = signal(false);
   esTelefono = signal(false);
@@ -55,6 +57,9 @@ export class AppLayout {
 
   preguntasFrecuentes: PreguntaFrecuente[] = PREGUNTAS_FRECUENTES;
   faqAbierta = signal<number | null>(null);
+  abrirPerfil(): void {
+    this.dialog.open(PerfilDialog, { width: '760px', maxWidth: '95vw', disableClose: false });
+  }
 
   constructor() {
     this.breakpoint
@@ -105,7 +110,7 @@ export class AppLayout {
     const enBarra = this.itemsBarra;
     return menu.filter((item) => !enBarra.includes(item));
   }
-    get accesosRapidos(): MenuItem[] {
+  get accesosRapidos(): MenuItem[] {
     return this.menuActual;
   }
 

@@ -8,6 +8,7 @@ export interface LoginResponse {
   tipo: string;
   usuarioId: number;
   nombreCompleto: string;
+  correo: string;
   rol: string;
 }
 

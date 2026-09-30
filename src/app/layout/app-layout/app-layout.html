@@ -37,10 +37,7 @@
       <span class="espaciador"></span>
 
       <button mat-icon-button matTooltip="Notificaciones" [matMenuTriggerFor]="menuNotificaciones">
-        <mat-icon
-          [matBadge]="cantidadNoLeidas()"
-          matBadgeSize="small"
-          matBadgeColor="warn"
+        <mat-icon [matBadge]="cantidadNoLeidas()" matBadgeSize="small" matBadgeColor="warn"
           [matBadgeHidden]="cantidadNoLeidas() === 0">
           notifications_none
         </mat-icon>
@@ -53,26 +50,26 @@
             <span>Notificaciones</span>
           </div>
           @if (cantidadNoLeidas() > 0) {
-            <button mat-button class="boton-marcar-leidas" (click)="marcarTodasComoLeidas()">
-              Marcar todas como vistas
-            </button>
+          <button mat-button class="boton-marcar-leidas" (click)="marcarTodasComoLeidas()">
+            Marcar todas como vistas
+          </button>
           }
         </div>
 
         @for (n of notificaciones(); track n.id) {
-          <button mat-menu-item class="item-notificacion" [class.no-leida]="!n.leida" (click)="irANotificacion(n)">
-            <div class="punto-no-leida" [class.visible]="!n.leida"></div>
-            <div class="texto-notificacion">
-              <strong>{{ n.titulo }}</strong>
-              <span class="mensaje-notificacion">{{ n.mensaje }}</span>
-              <span class="fecha-notificacion">{{ n.fecha | date:'dd/MM HH:mm' }}</span>
-            </div>
-          </button>
-        } @empty {
-          <div class="estado-vacio-panel">
-            <mat-icon>notifications_off</mat-icon>
-            <span>No tienes notificaciones</span>
+        <button mat-menu-item class="item-notificacion" [class.no-leida]="!n.leida" (click)="irANotificacion(n)">
+          <div class="punto-no-leida" [class.visible]="!n.leida"></div>
+          <div class="texto-notificacion">
+            <strong>{{ n.titulo }}</strong>
+            <span class="mensaje-notificacion">{{ n.mensaje }}</span>
+            <span class="fecha-notificacion">{{ n.fecha | date:'dd/MM HH:mm' }}</span>
           </div>
+        </button>
+        } @empty {
+        <div class="estado-vacio-panel">
+          <mat-icon>notifications_off</mat-icon>
+          <span>No tienes notificaciones</span>
+        </div>
         }
       </mat-menu>
 
@@ -90,17 +87,17 @@
 
         <div class="lista-faq">
           @for (item of preguntasFrecuentes; track item.id) {
-            <div class="item-faq">
-              <button type="button" class="pregunta-faq" (click)="toggleFaq(item.id)">
-                <span>{{ item.pregunta }}</span>
-                <mat-icon>{{ faqAbierta() === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
-              </button>
-              @if (faqAbierta() === item.id) {
-                <div class="respuesta-faq">
-                  <p>{{ item.respuesta }}</p>
-                </div>
-              }
+          <div class="item-faq">
+            <button type="button" class="pregunta-faq" (click)="toggleFaq(item.id)">
+              <span>{{ item.pregunta }}</span>
+              <mat-icon>{{ faqAbierta() === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
+            </button>
+            @if (faqAbierta() === item.id) {
+            <div class="respuesta-faq">
+              <p>{{ item.respuesta }}</p>
             </div>
+            }
+          </div>
           }
         </div>
       </mat-menu>
@@ -119,10 +116,10 @@
 
         <div class="lista-accesos">
           @for (item of accesosRapidos; track item.ruta) {
-            <a class="item-acceso" [routerLink]="item.ruta">
-              <mat-icon>{{ item.icono }}</mat-icon>
-              <span>{{ item.etiqueta }}</span>
-            </a>
+          <a class="item-acceso" [routerLink]="item.ruta">
+            <mat-icon>{{ item.icono }}</mat-icon>
+            <span>{{ item.etiqueta }}</span>
+          </a>
           }
         </div>
       </mat-menu>
@@ -142,11 +139,21 @@
           <div class="avatar avatar-grande">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
           <div class="datos-cabecera">
             <strong>{{ sesion?.nombreCompleto }}</strong>
-            <span>{{ etiquetaRol(sesion?.rol) }}</span>
+            <span>{{ sesion?.correo }}</span>
           </div>
         </div>
 
-        <button mat-menu-item (click)="authService.logout()">
+        <button mat-menu-item (click)="abrirPerfil()">
+          <mat-icon>person_outline</mat-icon>
+          <span>Ver perfil</span>
+        </button>
+
+        <button mat-menu-item (click)="abrirPerfil()">
+          <mat-icon>lock_outline</mat-icon>
+          <span>Cambiar contraseña</span>
+        </button>
+
+        <button mat-menu-item (click)="authService.logout()" class="opcion-cerrar-sesion">
           <mat-icon>logout</mat-icon>
           <span>Cerrar sesión</span>
         </button>

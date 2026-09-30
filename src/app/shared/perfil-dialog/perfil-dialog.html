@@ -1,0 +1,120 @@
+<div class="cabecera-perfil">
+  <div class="avatar-perfil">{{ perfil().nombres.charAt(0) }}{{ perfil().apellidos.charAt(0) }}</div>
+  <div>
+    <div class="etiqueta-cuenta">CUENTA INDUMETAL</div>
+    <h2>Mi perfil</h2>
+    <div class="fila-rol-correo">
+      <span class="chip-rol-perfil">{{ etiquetaRol(perfil().rol) }}</span>
+      <span class="correo-perfil">{{ perfil().correo }}</span>
+    </div>
+  </div>
+  <button mat-icon-button class="boton-cerrar" (click)="cerrar()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+
+<mat-dialog-content class="contenido-perfil">
+  @if (error()) {
+    <div class="mensaje-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
+
+  <div class="grid-perfil">
+
+    <div class="tarjeta-perfil">
+      <div class="titulo-tarjeta">
+        <mat-icon>edit</mat-icon>
+        <div>
+          <strong>Datos editables</strong>
+          <span>Mantén actualizada tu información de contacto.</span>
+        </div>
+      </div>
+
+      <form [formGroup]="form" class="formulario-perfil">
+        <div class="fila-doble">
+          <mat-form-field appearance="outline">
+            <mat-label>Nombres</mat-label>
+            <input matInput formControlName="nombres">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Apellidos</mat-label>
+            <input matInput formControlName="apellidos">
+          </mat-form-field>
+        </div>
+
+        <div class="fila-doble">
+          <mat-form-field appearance="outline">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="telefono">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Correo</mat-label>
+            <input matInput [value]="perfil().correo" disabled>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+
+    <div class="tarjeta-perfil">
+      <div class="titulo-tarjeta">
+        <mat-icon>shield</mat-icon>
+        <div>
+          <strong>Resumen de cuenta</strong>
+          <span>Datos de identificación del sistema.</span>
+        </div>
+      </div>
+
+      <div class="lista-resumen">
+        <div class="fila-resumen">
+          <mat-icon>alternate_email</mat-icon>
+          <div>
+            <span class="etiqueta-resumen">CORREO</span>
+            <strong>{{ perfil().correo }}</strong>
+          </div>
+        </div>
+
+        <div class="fila-resumen">
+          <mat-icon>badge</mat-icon>
+          <div>
+            <span class="etiqueta-resumen">ROL</span>
+            <strong>{{ etiquetaRol(perfil().rol) }}</strong>
+          </div>
+        </div>
+
+        <div class="fila-resumen">
+          <mat-icon>call</mat-icon>
+          <div>
+            <span class="etiqueta-resumen">TELÉFONO</span>
+            <strong>{{ perfil().telefono || '—' }}</strong>
+          </div>
+        </div>
+
+        <div class="fila-resumen">
+          <mat-icon>badge</mat-icon>
+          <div>
+            <span class="etiqueta-resumen">CÓDIGO DE EMPLEADO</span>
+            <strong>{{ perfil().codigoEmpleado }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="pie-perfil">
+  <span class="nota-pie">Los cambios se reflejan en tu sesión actual.</span>
+  <div class="botones-pie">
+    <button mat-stroked-button type="button" (click)="abrirCambiarPassword()">Cambiar contraseña</button>
+    <button mat-flat-button color="primary" (click)="guardar()" [disabled]="cargando() || form.invalid">
+      @if (cargando()) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        Guardar cambios
+      }
+    </button>
+  </div>
+</mat-dialog-actions>
