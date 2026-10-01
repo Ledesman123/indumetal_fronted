@@ -7,7 +7,8 @@ import { ActualizarPerfilRequest, PerfilUsuario } from '../models/perfil.model';
 /**
  * TEMPORAL (Sprint 2): datos de perfil en memoria, sembrados con lo que ya
  * hay en la sesion. En Sprint 3 esto se reemplaza por HttpClient contra
- * /api/usuarios/me (o el endpoint que exponga el backend para el propio perfil).
+ * /api/usuarios/me, y la foto se sube a Supabase Storage (se envia el archivo
+ * en vez de un base64, y se guarda la URL publica que devuelva Supabase).
  */
 @Injectable({ providedIn: 'root' })
 export class PerfilService {
@@ -24,7 +25,8 @@ export class PerfilService {
       ...this.perfil(),
       nombres: request.nombres,
       apellidos: request.apellidos,
-      telefono: request.telefono
+      telefono: request.telefono,
+      fotoUrl: request.fotoUrl !== undefined ? request.fotoUrl : this.perfil().fotoUrl
     };
 
     return of(actualizado).pipe(
@@ -36,7 +38,6 @@ export class PerfilService {
     );
   }
 
-  /** TEMPORAL (Sprint 2): simulado. En Sprint 3 valida la contrasena actual contra el backend. */
   cambiarPassword(passwordActual: string, passwordNueva: string): Observable<void> {
     return of(void 0).pipe(delay(600));
   }
@@ -50,7 +51,8 @@ export class PerfilService {
       correo: sesion?.correo ?? '',
       telefono: '',
       rol: sesion?.rol ?? '',
-      codigoEmpleado: '—'
+      codigoEmpleado: '—',
+      fotoUrl: null
     };
   }
 }

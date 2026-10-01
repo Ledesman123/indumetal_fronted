@@ -155,7 +155,8 @@ export class AppLayout {
     this.notificacionesService.marcarTodasComoLeidas();
   }
 
-  toggleFaq(id: number): void {
+  toggleFaq(id: number, evento: Event): void {
+    evento.stopPropagation();
     this.faqAbierta.set(this.faqAbierta() === id ? null : id);
   }
 }

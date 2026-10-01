@@ -5,10 +5,12 @@ export interface PerfilUsuario {
   telefono: string;
   rol: string;
   codigoEmpleado: string;
+  fotoUrl: string | null;
 }
 
 export interface ActualizarPerfilRequest {
   nombres: string;
   apellidos: string;
   telefono: string;
+  fotoUrl?: string | null;
 }

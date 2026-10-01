@@ -1,5 +1,6 @@
 .pagina-login {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   position: relative;
   background:
@@ -8,7 +9,10 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+
+  @media (min-width: 901px) {
+    background-attachment: fixed;
+  }
 }
 
 // ---------- Panel izquierdo (marca) ----------
@@ -147,6 +151,8 @@
     flex: none;
     width: 100%;
     min-height: 100vh;
+    min-height: 100dvh;
+    box-sizing: border-box;
   }
 }
 

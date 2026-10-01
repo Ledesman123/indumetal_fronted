@@ -41,6 +41,8 @@ export class PerfilDialog {
   perfil = this.perfilService.obtenerPerfil();
   cargando = signal(false);
   error = signal<string | null>(null);
+  arrastrandoFoto = signal(false);
+  fotoPreview = signal<string | null>(this.perfil().fotoUrl);
 
   form = this.fb.group({
     nombres: [this.perfil().nombres, [Validators.required, Validators.maxLength(60)]],
@@ -52,6 +54,55 @@ export class PerfilDialog {
     return ROLES_DISPONIBLES.find((r) => r.valor === rol)?.etiqueta ?? rol;
   }
 
+  // ---------- Foto de perfil ----------
+
+  onDragOver(evento: DragEvent): void {
+    evento.preventDefault();
+    this.arrastrandoFoto.set(true);
+  }
+
+  onDragLeave(evento: DragEvent): void {
+    evento.preventDefault();
+    this.arrastrandoFoto.set(false);
+  }
+
+  onDrop(evento: DragEvent): void {
+    evento.preventDefault();
+    this.arrastrandoFoto.set(false);
+    const archivo = evento.dataTransfer?.files?.[0];
+    if (archivo) this.procesarFoto(archivo);
+  }
+
+  onSeleccionarArchivo(evento: Event): void {
+    const input = evento.target as HTMLInputElement;
+    const archivo = input.files?.[0];
+    if (archivo) this.procesarFoto(archivo);
+  }
+
+  quitarFoto(): void {
+    this.fotoPreview.set(null);
+  }
+
+  private procesarFoto(archivo: File): void {
+    if (!archivo.type.startsWith('image/')) {
+      this.error.set('Solo se permiten archivos de imagen (JPG, PNG, WEBP).');
+      return;
+    }
+    if (archivo.size > 3 * 1024 * 1024) {
+      this.error.set('La imagen no debe superar los 3 MB.');
+      return;
+    }
+
+    this.error.set(null);
+    const lector = new FileReader();
+    // TEMPORAL (Sprint 2): base64 en memoria para previsualizar. En Sprint 3
+    // se sube el archivo a Supabase Storage y se guarda la URL publica.
+    lector.onload = () => this.fotoPreview.set(lector.result as string);
+    lector.readAsDataURL(archivo);
+  }
+
+  // ---------- Guardar ----------
+
   guardar(): void {
     if (this.form.invalid) return;
 
@@ -62,7 +113,8 @@ export class PerfilDialog {
       .actualizar({
         nombres: this.form.value.nombres!,
         apellidos: this.form.value.apellidos!,
-        telefono: this.form.value.telefono ?? ''
+        telefono: this.form.value.telefono ?? '',
+        fotoUrl: this.fotoPreview()
       })
       .subscribe({
         next: () => {

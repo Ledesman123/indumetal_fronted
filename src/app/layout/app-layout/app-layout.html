@@ -88,7 +88,7 @@
         <div class="lista-faq">
           @for (item of preguntasFrecuentes; track item.id) {
           <div class="item-faq">
-            <button type="button" class="pregunta-faq" (click)="toggleFaq(item.id)">
+            <button type="button" class="pregunta-faq" (click)="toggleFaq(item.id, $event)">
               <span>{{ item.pregunta }}</span>
               <mat-icon>{{ faqAbierta() === item.id ? 'expand_less' : 'expand_more' }}</mat-icon>
             </button>

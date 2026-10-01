@@ -1,13 +1,40 @@
 <div class="cabecera-perfil">
-  <div class="avatar-perfil">{{ perfil().nombres.charAt(0) }}{{ perfil().apellidos.charAt(0) }}</div>
-  <div>
+  <div
+    class="zona-avatar"
+    [class.arrastrando]="arrastrandoFoto()"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    (click)="inputFoto.click()">
+
+    @if (fotoPreview()) {
+      <img [src]="fotoPreview()" alt="Foto de perfil" class="imagen-avatar">
+    } @else {
+      <div class="avatar-perfil">{{ perfil().nombres.charAt(0) }}{{ perfil().apellidos.charAt(0) }}</div>
+    }
+
+    <div class="overlay-avatar">
+      <mat-icon>photo_camera</mat-icon>
+    </div>
+
+    <input #inputFoto type="file" accept="image/*" hidden (change)="onSeleccionarArchivo($event)" (click)="$event.stopPropagation()">
+  </div>
+
+  <div class="info-cabecera">
     <div class="etiqueta-cuenta">CUENTA INDUMETAL</div>
     <h2>Mi perfil</h2>
     <div class="fila-rol-correo">
       <span class="chip-rol-perfil">{{ etiquetaRol(perfil().rol) }}</span>
       <span class="correo-perfil">{{ perfil().correo }}</span>
     </div>
+    <div class="acciones-foto">
+      <button type="button" class="enlace-foto" (click)="inputFoto.click()">Cambiar foto de perfil</button>
+      @if (fotoPreview()) {
+        <button type="button" class="enlace-foto enlace-quitar" (click)="quitarFoto()">Quitar foto</button>
+      }
+    </div>
   </div>
+
   <button mat-icon-button class="boton-cerrar" (click)="cerrar()">
     <mat-icon>close</mat-icon>
   </button>
