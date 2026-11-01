@@ -34,9 +34,13 @@ export class Dashboard implements OnInit {
   ngOnInit(): void {
     this.dashboardService.resumen().subscribe((r) => this.resumen.set(r));
     this.dashboardService.materialesConMayorMovimiento().subscribe((m) => this.materialesTop.set(m));
-    this.dashboardService.valorizacion().subscribe((v) => {
-      this.valorizacion.set(v);
-      this.cargando.set(false);
+    this.dashboardService.valorizacion().subscribe({
+      next: (v) => {
+        this.valorizacion.set(v);
+        this.cargando.set(false);
+      },
+      // Ej. el Almacenero no tiene acceso a los indicadores gerenciales (403 en el backend).
+      error: () => this.cargando.set(false)
     });
     this.dashboardService.cumplimientoDespacho().subscribe((c) => this.cumplimiento.set(c));
   }

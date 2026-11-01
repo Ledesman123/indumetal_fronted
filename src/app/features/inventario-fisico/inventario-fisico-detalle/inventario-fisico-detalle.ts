@@ -56,15 +56,17 @@ export class InventarioFisicoDetalle implements OnInit {
     });
   }
 
-  registrarConteo(materialId: number, ubicacionId: number, valor: number | string): void {
+  registrarConteo(detalleId: number, valor: number | string): void {
     const inv = this.inventario();
     if (!inv) return;
 
     const cantidad = Number(valor);
-    if (isNaN(cantidad) || cantidad < 0) return;
+    if (valor === '' || isNaN(cantidad) || cantidad < 0) return;
 
-    this.inventarioService.registrarConteo(inv.id, materialId, ubicacionId, cantidad).subscribe((actualizado) => {
-      this.inventario.set(actualizado);
+    this.error.set(null);
+    this.inventarioService.registrarConteo(inv.id, detalleId, cantidad).subscribe({
+      next: (actualizado) => this.inventario.set(actualizado),
+      error: (err) => this.error.set(err.message ?? 'No se pudo registrar el conteo.')
     });
   }
 

@@ -57,9 +57,10 @@ export class Login {
         this.cargando.set(false);
         this.router.navigate(['/dashboard']);
       },
-      error: () => {
+      error: (err) => {
         this.cargando.set(false);
-        this.error.set('Correo o contraseña incorrectos.');
+        // El backend distingue credenciales invalidas, cuenta bloqueada o inactiva.
+        this.error.set(err.message ?? 'Correo o contraseña incorrectos.');
       }
     });
   }

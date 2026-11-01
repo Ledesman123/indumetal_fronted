@@ -1,61 +1,51 @@
-import { Injectable, signal } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { ApiResponse } from '../models/api-response.model';
 import { Ubicacion, UbicacionRequest } from '../models/ubicacion.model';
 
+/** Forma en que el backend serializa la entidad Ubicacion (con el almacen anidado). */
+interface UbicacionApi {
+  id: number;
+  codigo: string;
+  activo: boolean;
+  almacen: { id: number };
+}
+
+/** RF-05 / RF-07: ubicaciones fisicas contra /api/ubicaciones. */
 @Injectable({ providedIn: 'root' })
 export class UbicacionService {
-    private ubicaciones = signal<Ubicacion[]>([
-        { id: 1, codigo: 'A-01-01', almacenId: 1, activo: true },
-        { id: 2, codigo: 'A-01-02', almacenId: 1, activo: true },
-        { id: 3, codigo: 'A-02-01', almacenId: 1, activo: true },
-        { id: 4, codigo: 'B-01-01', almacenId: 2, activo: true }
-    ]);
+  private http = inject(HttpClient);
+  private url = `${environment.apiUrl}/ubicaciones`;
 
-    private siguienteId = 5;
+  listarPorAlmacen(almacenId: number): Observable<Ubicacion[]> {
+    return this.http
+      .get<ApiResponse<UbicacionApi[]>>(`${this.url}/por-almacen/${almacenId}`)
+      .pipe(map((r) => r.data.map(aUbicacion)));
+  }
 
-    listarPorAlmacen(almacenId: number): Observable<Ubicacion[]> {
-        return of(this.ubicaciones()).pipe(
-            delay(350),
-            map((lista) => lista.filter((u) => u.almacenId === almacenId))
-        );
-    }
+  /** Todas las ubicaciones activas de todos los almacenes. */
+  listarActivas(): Observable<Ubicacion[]> {
+    return this.http.get<ApiResponse<UbicacionApi[]>>(this.url).pipe(map((r) => r.data.map(aUbicacion)));
+  }
 
-    crear(request: UbicacionRequest): Observable<Ubicacion> {
-        const existeCodigo = this.ubicaciones().some(
-            (u) => u.almacenId === request.almacenId && u.codigo.toLowerCase() === request.codigo.toLowerCase()
-        );
-        if (existeCodigo) {
-            return throwError(() => new Error('Ya existe una ubicación con ese código en este almacén.')).pipe(delay(400));
-        }
+  crear(request: UbicacionRequest): Observable<Ubicacion> {
+    return this.http.post<ApiResponse<UbicacionApi>>(this.url, request).pipe(map((r) => aUbicacion(r.data)));
+  }
 
-        const nueva: Ubicacion = { id: this.siguienteId++, activo: true, ...request };
-        this.ubicaciones.update((lista) => [...lista, nueva]);
-        return of(nueva).pipe(delay(500));
-    }
+  actualizar(id: number, request: UbicacionRequest): Observable<Ubicacion> {
+    return this.http
+      .put<ApiResponse<UbicacionApi>>(`${this.url}/${id}`, request)
+      .pipe(map((r) => aUbicacion(r.data)));
+  }
 
-    actualizar(id: number, request: UbicacionRequest): Observable<Ubicacion> {
-        const actual = this.ubicaciones().find((u) => u.id === id);
-        if (!actual) {
-            return throwError(() => new Error('Ubicación no encontrada')).pipe(delay(400));
-        }
-        const actualizada: Ubicacion = { ...actual, ...request };
-        this.ubicaciones.update((lista) => lista.map((u) => (u.id === id ? actualizada : u)));
-        return of(actualizada).pipe(delay(500));
-    }
+  desactivar(id: number): Observable<void> {
+    return this.http.delete<ApiResponse<void>>(`${this.url}/${id}`).pipe(map(() => void 0));
+  }
+}
 
-    desactivar(id: number): Observable<void> {
-        this.ubicaciones.update((lista) => lista.map((u) => (u.id === id ? { ...u, activo: false } : u)));
-        return of(void 0).pipe(delay(400));
-    }
-    /** TEMPORAL (Sprint 2): snapshot sincrono, usado internamente por MovimientoService. */
-    obtenerPorIdSync(id: number): Ubicacion | undefined {
-        return this.ubicaciones().find((u) => u.id === id);
-    }
-
-    primeraActivaSync(): Ubicacion | undefined {
-        return this.ubicaciones()
-            .filter((u) => u.activo)
-            .sort((a, b) => a.id - b.id)[0];
-    }
+function aUbicacion(u: UbicacionApi): Ubicacion {
+  return { id: u.id, codigo: u.codigo, almacenId: u.almacen?.id, activo: u.activo };
 }

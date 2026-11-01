@@ -1,6 +1,7 @@
 export type EstadoInventario = 'EN_PROCESO' | 'CERRADO';
 
 export interface ItemInventarioFisico {
+  detalleId: number;
   materialId: number;
   materialSku: string;
   materialNombre: string;
@@ -13,6 +14,8 @@ export interface ItemInventarioFisico {
 
 export interface InventarioFisico {
   id: number;
+  almacenId: number;
+  almacenNombre: string;
   fechaInicio: string;
   fechaCierre: string | null;
   estado: EstadoInventario;

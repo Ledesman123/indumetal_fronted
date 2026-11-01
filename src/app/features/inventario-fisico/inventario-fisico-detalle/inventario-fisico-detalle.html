@@ -13,7 +13,7 @@
           {{ inv.estado === 'EN_PROCESO' ? 'En proceso' : 'Cerrado' }}
         </span>
       </div>
-      <p>Iniciado el {{ inv.fechaInicio | date:'dd/MM/yyyy HH:mm' }} por {{ inv.responsable }}</p>
+      <p>{{ inv.almacenNombre }} · Iniciado el {{ inv.fechaInicio | date:'dd/MM/yyyy HH:mm' }} por {{ inv.responsable }}</p>
     </div>
 
     @if (error()) {
@@ -54,7 +54,7 @@
                   type="number"
                   min="0"
                   [value]="item.stockContado"
-                  (change)="registrarConteo(item.materialId, item.ubicacionId, $any($event.target).value)">
+                  (change)="registrarConteo(item.detalleId, $any($event.target).value)">
               </mat-form-field>
             } @else {
               {{ item.stockContado }}

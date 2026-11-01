@@ -14,12 +14,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 import { Material } from '../../core/models/material.model';
 import { Ubicacion } from '../../core/models/ubicacion.model';
 import { MovimientoAlmacen, TipoMovimiento } from '../../core/models/movimiento.model';
 import { MaterialService } from '../../core/services/material.service';
 import { UbicacionService } from '../../core/services/ubicacion.service';
 import { MovimientoService } from '../../core/services/movimiento.service';
+import { aFechaIso } from '../../core/services/dashboard.service';
 
 @Component({
   selector: 'app-movimientos',
@@ -76,7 +78,7 @@ export class Movimientos implements OnInit {
 
   ngOnInit(): void {
     this.materialService.listar().subscribe((lista) => this.materiales.set(lista.filter((m) => m.activo)));
-    this.cargarUbicacionesDeAmbosAlmacenes();
+    this.ubicacionService.listarActivas().subscribe((lista) => this.ubicaciones.set(lista));
     this.cargarHistorial();
   }
 
@@ -99,7 +101,7 @@ export class Movimientos implements OnInit {
     this.cargando.set(true);
 
     const v = this.form.value;
-    let operacion;
+    let operacion: Observable<unknown>;
 
     switch (this.tipoSeleccionado()) {
       case 'INGRESO':
@@ -108,7 +110,7 @@ export class Movimientos implements OnInit {
           ubicacionId: v.ubicacionId ?? null,
           cantidad: v.cantidad!,
           lote: v.lote || undefined,
-          fechaVencimiento: v.fechaVencimiento ? v.fechaVencimiento.toISOString() : undefined,
+          fechaVencimiento: v.fechaVencimiento ? aFechaIso(v.fechaVencimiento) : undefined,
           ordenCompra: v.ordenCompra || undefined,
           proveedor: v.proveedor || undefined
         });
@@ -158,22 +160,12 @@ export class Movimientos implements OnInit {
 
   private cargarHistorial(): void {
     this.cargandoHistorial.set(true);
-    this.movimientoService.listarMovimientos().subscribe((lista) => {
-      this.historial.set(lista);
-      this.cargandoHistorial.set(false);
-    });
-  }
-
-  private cargarUbicacionesDeAmbosAlmacenes(): void {
-    // TEMPORAL (Sprint 2): UbicacionService solo expone listado por almacen;
-    // como aun no hay selector de almacen en este formulario, juntamos las de
-    // los almacenes conocidos (1 y 2) en una sola lista para el <mat-select>.
-    const todas: Ubicacion[] = [];
-    [1, 2].forEach((almacenId) => {
-      this.ubicacionService.listarPorAlmacen(almacenId).subscribe((lista) => {
-        todas.push(...lista.filter((u) => u.activo));
-        this.ubicaciones.set([...todas]);
-      });
+    this.movimientoService.listarMovimientos().subscribe({
+      next: (lista) => {
+        this.historial.set(lista);
+        this.cargandoHistorial.set(false);
+      },
+      error: () => this.cargandoHistorial.set(false)
     });
   }
 
@@ -182,8 +174,18 @@ export class Movimientos implements OnInit {
       INGRESO: 'Ingreso',
       SALIDA: 'Salida',
       DEVOLUCION: 'Devolución',
-      TRANSFERENCIA: 'Transferencia'
+      TRANSFERENCIA: 'Transferencia',
+      TRANSFERENCIA_SALIDA: 'Transf. (salida)',
+      TRANSFERENCIA_ENTRADA: 'Transf. (entrada)',
+      AJUSTE_POSITIVO: 'Ajuste (+)',
+      AJUSTE_NEGATIVO: 'Ajuste (−)'
     };
     return etiquetas[tipo] ?? tipo;
+  }
+
+  claseTipo(tipo: string): string {
+    if (tipo.startsWith('TRANSFERENCIA')) return 'tipo-transferencia';
+    if (tipo.startsWith('AJUSTE')) return 'tipo-ajuste';
+    return 'tipo-' + tipo.toLowerCase();
   }
 }

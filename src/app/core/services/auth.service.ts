@@ -1,7 +1,10 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
-import { delay, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { ApiResponse } from '../models/api-response.model';
 import {
   LoginRequest,
   LoginResponse,
@@ -9,49 +12,40 @@ import {
 } from '../models/auth.model';
 
 const CLAVE_SESION = 'indumetal_sesion';
-const CODIGO_DEMO = '123456';
-const TOKEN_RESET_DEMO = 'reset-token-simulado';
 
+/** RF-01: autenticacion JWT contra /api/auth/* del backend. */
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private url = `${environment.apiUrl}/auth`;
+
   private sesionActual = signal<LoginResponse | null>(this.recuperarSesionGuardada());
 
-  constructor(private router: Router) {}
-
   login(request: LoginRequest): Observable<LoginResponse> {
-    const respuestaSimulada: LoginResponse = {
-      token: 'token-simulado-sprint-2',
-      tipo: 'Bearer',
-      usuarioId: 1,
-      nombreCompleto: 'Administrador General',
-      correo: request.correo,
-      rol: this.inferirRolDeCorreo(request.correo)
-    };
-
-    return of(respuestaSimulada).pipe(
-      delay(600),
+    return this.http.post<ApiResponse<Omit<LoginResponse, 'correo'>>>(`${this.url}/login`, request).pipe(
+      // El backend no devuelve el correo en la respuesta; se guarda el usado al iniciar sesion.
+      map((r) => ({ ...r.data, correo: request.correo })),
       tap((respuesta) => this.guardarSesion(respuesta))
     );
   }
 
   solicitarCodigo(correo: string): Observable<string> {
-    return of('Si el correo esta registrado, se enviara un codigo de verificacion.').pipe(
-      delay(700)
-    );
+    return this.http
+      .post<ApiResponse<void>>(`${this.url}/forgot-password`, { correo })
+      .pipe(map((r) => r.message));
   }
 
   verificarCodigo(correo: string, codigo: string): Observable<VerifyResetCodeResponse> {
-    if (codigo !== CODIGO_DEMO) {
-      return throwError(() => new Error('Codigo o token invalido o expirado.')).pipe(delay(500));
-    }
-    return of({ resetToken: TOKEN_RESET_DEMO, expiraEnMinutos: 10 }).pipe(delay(500));
+    return this.http
+      .post<ApiResponse<VerifyResetCodeResponse>>(`${this.url}/verify-reset-code`, { correo, codigo })
+      .pipe(map((r) => r.data));
   }
 
   resetearPassword(correo: string, resetToken: string, nuevaPassword: string): Observable<void> {
-    if (resetToken !== TOKEN_RESET_DEMO) {
-      return throwError(() => new Error('Codigo o token invalido o expirado.')).pipe(delay(500));
-    }
-    return of(void 0).pipe(delay(500));
+    return this.http
+      .post<ApiResponse<void>>(`${this.url}/reset-password`, { correo, resetToken, nuevaPassword })
+      .pipe(map(() => void 0));
   }
 
   logout(): void {
@@ -61,7 +55,18 @@ export class AuthService {
   }
 
   estaAutenticado(): boolean {
-    return this.sesionActual() !== null;
+    const sesion = this.sesionActual();
+    if (!sesion) return false;
+    if (this.tokenExpirado(sesion.token)) {
+      localStorage.removeItem(CLAVE_SESION);
+      this.sesionActual.set(null);
+      return false;
+    }
+    return true;
+  }
+
+  obtenerToken(): string | null {
+    return this.sesionActual()?.token ?? null;
   }
 
   obtenerRol(): string | null {
@@ -87,14 +92,21 @@ export class AuthService {
   }
 
   private recuperarSesionGuardada(): LoginResponse | null {
-    const guardada = localStorage.getItem(CLAVE_SESION);
-    return guardada ? JSON.parse(guardada) : null;
+    try {
+      const guardada = localStorage.getItem(CLAVE_SESION);
+      return guardada ? JSON.parse(guardada) : null;
+    } catch {
+      return null;
+    }
   }
 
-  private inferirRolDeCorreo(correo: string): string {
-    if (correo.includes('admin')) return 'ADMINISTRADOR';
-    if (correo.includes('supervisor')) return 'SUPERVISOR_ALMACEN';
-    if (correo.includes('jefe')) return 'JEFE_PRODUCCION';
-    return 'ALMACENERO';
+  /** Lee el "exp" del JWT (sin validar firma; eso lo hace el backend) para no usar tokens vencidos. */
+  private tokenExpirado(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+      return typeof payload.exp === 'number' && payload.exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
   }
 }

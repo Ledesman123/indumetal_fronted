@@ -5,6 +5,7 @@ export interface StockUbicacion {
   unidadMedida: string;
   ubicacionId: number;
   ubicacionCodigo: string;
+  almacenId: number;
   almacenNombre: string;
   cantidad: number;
   stockMinimo: number;

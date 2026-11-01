@@ -1,61 +1,33 @@
-import { Injectable, signal } from '@angular/core';
-import { Observable, of, throwError } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
+import { ApiResponse } from '../models/api-response.model';
 import { Usuario, UsuarioRequest } from '../models/usuario.model';
 
-/**
- * TEMPORAL (Sprint 2): datos en memoria, misma firma que tendra el
- * HttpClient real en Sprint 3 contra /api/usuarios.
- */
+/** RF-03: administracion de usuarios contra /api/usuarios (solo Administrador). */
 @Injectable({ providedIn: 'root' })
 export class UsuarioService {
-  private usuarios = signal<Usuario[]>([
-    { id: 1, nombres: 'Administrador', apellidos: 'General', correo: 'admin@indumetal.pe', rol: 'ADMINISTRADOR', activo: true },
-    { id: 2, nombres: 'Carlos', apellidos: 'Ramírez', correo: 'carlos.ramirez@indumetal.pe', rol: 'SUPERVISOR_ALMACEN', activo: true },
-    { id: 3, nombres: 'Lucía', apellidos: 'Torres', correo: 'lucia.torres@indumetal.pe', rol: 'ALMACENERO', activo: true }
-  ]);
-
-  private siguienteId = 4;
+  private http = inject(HttpClient);
+  private url = `${environment.apiUrl}/usuarios`;
 
   listar(): Observable<Usuario[]> {
-    return of(this.usuarios()).pipe(delay(400));
+    return this.http.get<ApiResponse<Usuario[]>>(this.url).pipe(map((r) => r.data));
   }
 
   crear(request: UsuarioRequest): Observable<Usuario> {
-    const existeCorreo = this.usuarios().some((u) => u.correo.toLowerCase() === request.correo.toLowerCase());
-    if (existeCorreo) {
-      return throwError(() => new Error('Ya existe un usuario con ese correo.')).pipe(delay(400));
-    }
-
-    const nuevo: Usuario = {
-      id: this.siguienteId++,
-      activo: true,
-      nombres: request.nombres,
-      apellidos: request.apellidos,
-      correo: request.correo,
-      rol: request.rol
-    };
-    this.usuarios.update((lista) => [...lista, nuevo]);
-    return of(nuevo).pipe(delay(500));
+    return this.http.post<ApiResponse<Usuario>>(this.url, request).pipe(map((r) => r.data));
   }
 
   actualizar(id: number, request: UsuarioRequest): Observable<Usuario> {
-    const actual = this.usuarios().find((u) => u.id === id);
-    if (!actual) return throwError(() => new Error('Usuario no encontrado')).pipe(delay(400));
-
-    const actualizado: Usuario = {
-      ...actual,
-      nombres: request.nombres,
-      apellidos: request.apellidos,
-      correo: request.correo,
-      rol: request.rol
-    };
-    this.usuarios.update((lista) => lista.map((u) => (u.id === id ? actualizado : u)));
-    return of(actualizado).pipe(delay(500));
+    return this.http.put<ApiResponse<Usuario>>(`${this.url}/${id}`, request).pipe(map((r) => r.data));
   }
 
   cambiarEstado(id: number, activo: boolean): Observable<void> {
-    this.usuarios.update((lista) => lista.map((u) => (u.id === id ? { ...u, activo } : u)));
-    return of(void 0).pipe(delay(400));
+    const params = new HttpParams().set('activo', activo);
+    return this.http
+      .patch<ApiResponse<Usuario>>(`${this.url}/${id}/estado`, null, { params })
+      .pipe(map(() => void 0));
   }
 }

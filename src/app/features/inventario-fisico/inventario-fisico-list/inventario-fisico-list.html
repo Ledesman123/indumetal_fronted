@@ -5,11 +5,30 @@
       <p>Realiza el conteo periódico del almacén y ajusta diferencias contra el sistema.</p>
     </div>
 
-    <button mat-flat-button color="primary" (click)="iniciarInventario()" [disabled]="iniciando() || hayInventarioEnProceso()">
-      <mat-icon>playlist_add_check</mat-icon>
-      Iniciar inventario
-    </button>
+    <div class="acciones-inicio">
+      <mat-form-field appearance="outline" class="campo-almacen" subscriptSizing="dynamic">
+        <mat-label>Almacén</mat-label>
+        <mat-select [value]="almacenSeleccionado()" (selectionChange)="almacenSeleccionado.set($event.value)">
+          @for (a of almacenes(); track a.id) {
+            <mat-option [value]="a.id">{{ a.nombre }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" (click)="iniciarInventario()"
+              [disabled]="iniciando() || hayInventarioEnProceso() || !almacenSeleccionado()">
+        <mat-icon>playlist_add_check</mat-icon>
+        Iniciar inventario
+      </button>
+    </div>
   </div>
+
+  @if (error()) {
+    <div class="mensaje-error">
+      <mat-icon>error_outline</mat-icon>
+      <span>{{ error() }}</span>
+    </div>
+  }
 
   @if (hayInventarioEnProceso()) {
     <div class="aviso-en-proceso">

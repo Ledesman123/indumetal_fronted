@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://TU-BACKEND-EN-PRODUCCION.com/api'
+  apiUrl: 'https://indumetal-backend.onrender.com/api'
 };

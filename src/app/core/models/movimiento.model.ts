@@ -1,15 +1,28 @@
+/** Tipos que el usuario puede registrar desde el formulario de Movimientos. */
 export type TipoMovimiento = 'INGRESO' | 'SALIDA' | 'DEVOLUCION' | 'TRANSFERENCIA';
+
+/**
+ * Tipos tal como los guarda el backend: una transferencia genera dos registros
+ * (TRANSFERENCIA_SALIDA + TRANSFERENCIA_ENTRADA) y el inventario fisico genera ajustes.
+ */
+export type TipoMovimientoRegistrado =
+  | 'INGRESO'
+  | 'SALIDA'
+  | 'DEVOLUCION'
+  | 'TRANSFERENCIA_SALIDA'
+  | 'TRANSFERENCIA_ENTRADA'
+  | 'AJUSTE_POSITIVO'
+  | 'AJUSTE_NEGATIVO';
 
 export interface MovimientoAlmacen {
   id: number;
-  tipo: TipoMovimiento;
+  tipo: TipoMovimientoRegistrado;
   materialId: number;
   materialSku: string;
   materialNombre: string;
+  unidadMedida?: string;
   ubicacionId: number;
   ubicacionCodigo: string;
-  ubicacionDestinoId?: number;
-  ubicacionDestinoCodigo?: string;
   cantidad: number;
   saldoResultante: number;
   lote?: string;
@@ -18,6 +31,8 @@ export interface MovimientoAlmacen {
   proveedor?: string;
   ordenProduccion?: string;
   areaSolicitante?: string;
+  movimientoRelacionadoId?: number;
+  observaciones?: string;
   usuario: string;
   creadoEn: string;
 }
@@ -27,7 +42,7 @@ export interface IngresoRequest {
   ubicacionId: number | null; // null = asignacion automatica (RF-07)
   cantidad: number;
   lote?: string;
-  fechaVencimiento?: string;
+  fechaVencimiento?: string; // yyyy-MM-dd
   ordenCompra?: string;
   proveedor?: string;
 }
