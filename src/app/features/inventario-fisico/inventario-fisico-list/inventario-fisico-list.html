@@ -33,7 +33,7 @@
   @if (hayInventarioEnProceso()) {
     <div class="aviso-en-proceso">
       <mat-icon>info</mat-icon>
-      <span>Ya hay un inventario en proceso. Complétalo o ciérralo antes de iniciar otro.</span>
+      <span>Este almacén ya tiene un inventario en proceso. Complétalo o ciérralo antes de iniciar otro.</span>
     </div>
   }
 
@@ -46,6 +46,11 @@
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef>N°</th>
         <td mat-cell *matCellDef="let inv">#{{ inv.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="almacen">
+        <th mat-header-cell *matHeaderCellDef>Almacén</th>
+        <td mat-cell *matCellDef="let inv">{{ inv.almacenNombre }}</td>
       </ng-container>
 
       <ng-container matColumnDef="fechaInicio">

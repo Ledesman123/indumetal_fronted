@@ -34,7 +34,7 @@ export class InventarioFisicoList implements OnInit {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
 
-  columnas = ['id', 'fechaInicio', 'fechaCierre', 'responsable', 'estado', 'acciones'];
+  columnas = ['id', 'almacen', 'fechaInicio', 'fechaCierre', 'responsable', 'estado', 'acciones'];
   inventarios = signal<InventarioFisico[]>([]);
   almacenes = signal<Almacen[]>([]);
   almacenSeleccionado = signal<number | null>(null);
@@ -88,7 +88,9 @@ export class InventarioFisicoList implements OnInit {
     this.router.navigate(['/inventario-fisico', inventario.id]);
   }
 
+  /** Solo se bloquea el inicio si el almacen seleccionado ya tiene un inventario abierto. */
   hayInventarioEnProceso(): boolean {
-    return this.inventarios().some((i) => i.estado === 'EN_PROCESO');
+    const almacenId = this.almacenSeleccionado();
+    return this.inventarios().some((i) => i.estado === 'EN_PROCESO' && i.almacenId === almacenId);
   }
 }

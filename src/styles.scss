@@ -95,3 +95,33 @@ body {
     transform: translateY(0);
   }
 }
+/* ===== Autocompletado del navegador =====
+   Chrome pinta los campos autocompletados de celeste (#e8f0fe); se mantiene el fondo blanco. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1a1f2b !important;
+  caret-color: #1a1f2b;
+  transition: background-color 9999s ease-out 0s;
+}
+
+/* ===== Avatar con foto de perfil (header, menu de usuario, panel movil) ===== */
+.avatar {
+  overflow: hidden;
+  background: linear-gradient(135deg, #0f1f33 0%, #1c3d6e 100%);
+  letter-spacing: 0.5px;
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 3px #d6dde8;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+/* Codigos (ubicaciones, SKU) en una sola linea dentro de las tablas */
+.celda-codigo {
+  white-space: nowrap;
+}

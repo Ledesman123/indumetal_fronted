@@ -17,7 +17,7 @@
     </nav>
 
     <div class="pie-sidebar">
-      <span>v1.0.0 · Sprint 2</span>
+      <span>v1.0.0 · INDUMETAL PERÚ</span>
     </div>
   </mat-sidenav>
 
@@ -131,12 +131,24 @@
           <span class="nombre">{{ sesion?.nombreCompleto }}</span>
           <span class="rol-usuario">{{ etiquetaRol(sesion?.rol) }}</span>
         </div>
-        <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
+        <div class="avatar">
+          @if (foto()) {
+          <img [src]="foto()" alt="Foto de perfil">
+          } @else {
+          {{ iniciales }}
+          }
+        </div>
       </button>
 
       <mat-menu #menuUsuario="matMenu">
         <div class="cabecera-menu-usuario">
-          <div class="avatar avatar-grande">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
+          <div class="avatar avatar-grande">
+          @if (foto()) {
+          <img [src]="foto()" alt="Foto de perfil">
+          } @else {
+          {{ iniciales }}
+          }
+        </div>
           <div class="datos-cabecera">
             <strong>{{ sesion?.nombreCompleto }}</strong>
             <span>{{ sesion?.correo }}</span>
@@ -148,7 +160,7 @@
           <span>Ver perfil</span>
         </button>
 
-        <button mat-menu-item (click)="abrirPerfil()">
+        <button mat-menu-item (click)="abrirCambiarPassword()">
           <mat-icon>lock_outline</mat-icon>
           <span>Cambiar contraseña</span>
         </button>
@@ -196,7 +208,13 @@
   <div class="asa"></div>
 
   <div class="usuario-mas">
-    <div class="avatar">{{ sesion?.nombreCompleto?.charAt(0) }}</div>
+    <div class="avatar">
+          @if (foto()) {
+          <img [src]="foto()" alt="Foto de perfil">
+          } @else {
+          {{ iniciales }}
+          }
+        </div>
     <div class="datos-usuario">
       <span class="nombre">{{ sesion?.nombreCompleto }}</span>
       <span class="rol-usuario">{{ etiquetaRol(sesion?.rol) }}</span>

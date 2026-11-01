@@ -45,7 +45,7 @@
         <mat-icon>payments</mat-icon>
       </div>
       <div class="dato-indicador">
-        <span class="numero">S/ {{ (resumen()?.valorizacionTotalInventario ?? 0).toFixed(2) }}</span>
+        <span class="numero">S/ {{ (resumen()?.valorizacionTotalInventario ?? 0) | number:'1.2-2' }}</span>
         <span class="etiqueta">Valorización del inventario</span>
       </div>
     </div>
@@ -77,7 +77,7 @@
           <div class="barra-fondo">
             <div class="barra-relleno barra-verde" [style.width.%]="porcentajeDeCategoria(item.valorizacion)"></div>
           </div>
-          <span class="valor-barra">S/ {{ item.valorizacion.toFixed(2) }}</span>
+          <span class="valor-barra">S/ {{ item.valorizacion | number:'1.2-2' }}</span>
         </div>
       } @empty {
         <p class="sin-datos">Sin datos de valorización todavía.</p>

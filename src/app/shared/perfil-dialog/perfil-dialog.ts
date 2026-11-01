@@ -1,4 +1,5 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
+import { comprimirImagen } from '../utils/imagen';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -44,11 +45,24 @@ export class PerfilDialog {
   arrastrandoFoto = signal(false);
   fotoPreview = signal<string | null>(this.perfil().fotoUrl);
 
+  private fotoModificada = false;
+
   form = this.fb.group({
     nombres: [this.perfil().nombres, [Validators.required, Validators.maxLength(60)]],
     apellidos: [this.perfil().apellidos, [Validators.required, Validators.maxLength(60)]],
     telefono: [this.perfil().telefono, [Validators.maxLength(20)]]
   });
+
+  constructor() {
+    // Cuando llegan los datos del backend, se reflejan en el formulario si el usuario aun no edito nada.
+    effect(() => {
+      const p = this.perfil();
+      if (this.form.pristine) {
+        this.form.patchValue({ nombres: p.nombres, apellidos: p.apellidos, telefono: p.telefono }, { emitEvent: false });
+      }
+      if (!this.fotoModificada) this.fotoPreview.set(p.fotoUrl);
+    });
+  }
 
   etiquetaRol(rol: string): string {
     return ROLES_DISPONIBLES.find((r) => r.valor === rol)?.etiqueta ?? rol;
@@ -81,6 +95,7 @@ export class PerfilDialog {
 
   quitarFoto(): void {
     this.fotoPreview.set(null);
+    this.fotoModificada = true;
   }
 
   private procesarFoto(archivo: File): void {
@@ -94,11 +109,13 @@ export class PerfilDialog {
     }
 
     this.error.set(null);
-    const lector = new FileReader();
-    // TEMPORAL (Sprint 2): base64 en memoria para previsualizar. En Sprint 3
-    // se sube el archivo a Supabase Storage y se guarda la URL publica.
-    lector.onload = () => this.fotoPreview.set(lector.result as string);
-    lector.readAsDataURL(archivo);
+    // Se reduce a 320px (JPEG) antes de guardarla en el backend junto al perfil.
+    comprimirImagen(archivo, 320)
+      .then((dataUrl) => {
+        this.fotoPreview.set(dataUrl);
+        this.fotoModificada = true;
+      })
+      .catch((e: Error) => this.error.set(e.message));
   }
 
   // ---------- Guardar ----------
@@ -119,11 +136,13 @@ export class PerfilDialog {
       .subscribe({
         next: () => {
           this.cargando.set(false);
+          this.fotoModificada = false;
+          this.form.markAsPristine();
           this.snackBar.open('Perfil actualizado correctamente', 'Cerrar', { duration: 3000 });
         },
-        error: () => {
+        error: (err) => {
           this.cargando.set(false);
-          this.error.set('No se pudo actualizar el perfil.');
+          this.error.set(err.message ?? 'No se pudo actualizar el perfil.');
         }
       });
   }

@@ -12,7 +12,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Material } from '../../core/models/material.model';
 import { MaterialService } from '../../core/services/material.service';
-import { MovimientoService } from '../../core/services/movimiento.service';
+import { ReporteService, FormatoReporte } from '../../core/services/reporte.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-reportes',
@@ -35,7 +36,7 @@ import { MovimientoService } from '../../core/services/movimiento.service';
 export class Reportes {
   private fb = inject(FormBuilder);
   private materialService = inject(MaterialService);
-  private movimientoService = inject(MovimientoService);
+  private reporteService = inject(ReporteService);
   private snackBar = inject(MatSnackBar);
 
   materiales = signal<Material[]>([]);
@@ -55,115 +56,38 @@ export class Reportes {
     this.materialService.listar().subscribe((lista) => this.materiales.set(lista.filter((m) => m.activo)));
   }
 
-  descargarMovimientos(formato: 'pdf' | 'excel'): void {
+  descargarMovimientos(formato: FormatoReporte): void {
     if (this.formMovimientos.invalid) return;
-    const clave = `movimientos-${formato}`;
-    this.generando.set(clave);
-
-    this.movimientoService.listarMovimientos().subscribe((movimientos) => {
-      const { desde, hasta, materialId } = this.formMovimientos.value;
-      const filtrados = movimientos.filter((m) => {
-        const fecha = new Date(m.creadoEn);
-        const cumpleFecha = fecha >= desde! && fecha <= hasta!;
-        const cumpleMaterial = !materialId || m.materialId === materialId;
-        return cumpleFecha && cumpleMaterial;
-      });
-
-      this.descargarComoCsv(
-        `movimientos_${this.formatoFecha(desde!)}_${this.formatoFecha(hasta!)}.csv`,
-        ['Fecha', 'Tipo', 'SKU', 'Material', 'Ubicación', 'Cantidad', 'Saldo', 'Usuario'],
-        filtrados.map((m) => [
-          new Date(m.creadoEn).toLocaleString('es-PE'),
-          m.tipo,
-          m.materialSku,
-          m.materialNombre,
-          m.ubicacionCodigo,
-          m.cantidad,
-          m.saldoResultante,
-          m.usuario
-        ])
-      );
-
-      this.generando.set(null);
-      this.avisarDescarga(formato);
-    });
+    const { desde, hasta, materialId } = this.formMovimientos.value;
+    if (hasta! < desde!) {
+      this.snackBar.open('La fecha "hasta" no puede ser anterior a "desde".', 'Cerrar', { duration: 4000 });
+      return;
+    }
+    this.ejecutar(`movimientos-${formato}`, this.reporteService.movimientos(formato, desde!, hasta!, materialId ?? null));
   }
 
-  descargarKardex(formato: 'pdf' | 'excel'): void {
+  descargarKardex(formato: FormatoReporte): void {
     if (this.formKardex.invalid) return;
-    const clave = `kardex-${formato}`;
-    this.generando.set(clave);
-
     const materialId = this.formKardex.value.materialId!;
-    const material = this.materiales().find((m) => m.id === materialId);
-
-    this.movimientoService.listarKardex(materialId).subscribe((items) => {
-      this.descargarComoCsv(
-        `kardex_${material?.sku ?? materialId}.csv`,
-        ['Fecha', 'Tipo', 'Ubicación', 'Entrada', 'Salida', 'Saldo', 'Referencia', 'Usuario'],
-        items.map((i) => [
-          new Date(i.fecha).toLocaleString('es-PE'),
-          i.tipo,
-          i.ubicacion,
-          i.entrada || '',
-          i.salida || '',
-          i.saldo,
-          i.referencia ?? '',
-          i.usuario
-        ])
-      );
-
-      this.generando.set(null);
-      this.avisarDescarga(formato);
-    });
+    const sku = this.materiales().find((m) => m.id === materialId)?.sku ?? String(materialId);
+    this.ejecutar(`kardex-${formato}`, this.reporteService.kardex(formato, materialId, sku));
   }
 
   descargarStock(): void {
-    this.generando.set('stock-excel');
+    this.ejecutar('stock-excel', this.reporteService.stock());
+  }
 
-    this.movimientoService.listarStock().subscribe((stock) => {
-      this.descargarComoCsv(
-        `stock_actual_${this.formatoFecha(new Date())}.csv`,
-        ['SKU', 'Material', 'Almacén', 'Ubicación', 'Cantidad', 'Unidad', 'Stock mínimo', 'Stock máximo'],
-        stock.map((s) => [
-          s.materialSku,
-          s.materialNombre,
-          s.almacenNombre,
-          s.ubicacionCodigo,
-          s.cantidad,
-          s.unidadMedida,
-          s.stockMinimo,
-          s.stockMaximo
-        ])
-      );
-
-      this.generando.set(null);
-      this.avisarDescarga('excel');
+  private ejecutar(clave: string, descarga: Observable<void>): void {
+    this.generando.set(clave);
+    descarga.subscribe({
+      next: () => {
+        this.generando.set(null);
+        this.snackBar.open('Reporte descargado correctamente.', 'Cerrar', { duration: 3000 });
+      },
+      error: (err) => {
+        this.generando.set(null);
+        this.snackBar.open(err.message ?? 'No se pudo generar el reporte.', 'Cerrar', { duration: 5000 });
+      }
     });
-  }
-
-  private avisarDescarga(formato: 'pdf' | 'excel'): void {
-    const mensaje = formato === 'pdf'
-      ? 'Reporte generado (simulado como CSV en Sprint 2; en Sprint 3 será un PDF real del backend).'
-      : 'Reporte descargado correctamente.';
-    this.snackBar.open(mensaje, 'Cerrar', { duration: 4000 });
-  }
-
-  private descargarComoCsv(nombreArchivo: string, encabezados: string[], filas: (string | number)[][]): void {
-    const contenido = [encabezados, ...filas]
-      .map((fila) => fila.map((valor) => `"${String(valor).replace(/"/g, '""')}"`).join(','))
-      .join('\n');
-
-    const blob = new Blob(['\uFEFF' + contenido], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const enlace = document.createElement('a');
-    enlace.href = url;
-    enlace.download = nombreArchivo;
-    enlace.click();
-    URL.revokeObjectURL(url);
-  }
-
-  private formatoFecha(fecha: Date): string {
-    return fecha.toISOString().slice(0, 10);
   }
 }

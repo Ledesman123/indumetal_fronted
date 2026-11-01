@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { comprimirImagen } from '../../../shared/utils/imagen';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -101,12 +102,10 @@ export class MaterialFormDialog {
     }
 
     this.error.set(null);
-    const lector = new FileReader();
-    // TEMPORAL (Sprint 2): se guarda como base64 en memoria para previsualizar.
-    // En Sprint 3 esto se reemplaza por una subida real al backend, que
-    // devolvera una URL definitiva para guardar en imagenUrl.
-    lector.onload = () => this.imagenPreview.set(lector.result as string);
-    lector.readAsDataURL(archivo);
+    // Se reduce a 600px (JPEG) y se guarda como data URL en imagenUrl del material.
+    comprimirImagen(archivo, 600)
+      .then((dataUrl) => this.imagenPreview.set(dataUrl))
+      .catch((e: Error) => this.error.set(e.message));
   }
 
   // ---------- Guardar ----------

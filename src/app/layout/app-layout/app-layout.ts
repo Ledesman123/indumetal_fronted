@@ -18,6 +18,8 @@ import { ROLES_DISPONIBLES } from '../../core/models/usuario.model';
 import { PREGUNTAS_FRECUENTES, PreguntaFrecuente } from '../ayuda-contenido';
 import { MatDialog } from '@angular/material/dialog';
 import { PerfilDialog } from '../../shared/perfil-dialog/perfil-dialog';
+import { CambiarPasswordDialog } from '../../shared/cambiar-password-dialog/cambiar-password-dialog';
+import { PerfilService } from '../../core/services/perfil.service';
 const RUTAS_PRIORITARIAS_TELEFONO = ['/dashboard', '/movimientos', '/stock', '/materiales'];
 const MAX_ITEMS_BARRA = 5;
 
@@ -46,6 +48,10 @@ export class AppLayout {
   private breakpoint = inject(BreakpointObserver);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private perfilService = inject(PerfilService);
+
+  /** Foto de perfil del usuario (o null para mostrar sus iniciales). */
+  foto = this.perfilService.foto;
 
   esMovil = signal(false);
   esTelefono = signal(false);
@@ -61,7 +67,14 @@ export class AppLayout {
     this.dialog.open(PerfilDialog, { width: '760px', maxWidth: '95vw', disableClose: false });
   }
 
+  abrirCambiarPassword(): void {
+    this.dialog.open(CambiarPasswordDialog, { width: '420px', maxWidth: '95vw', disableClose: true });
+  }
+
   constructor() {
+    // Carga la foto y los datos actualizados del perfil para el avatar del header.
+    this.perfilService.obtenerPerfil();
+
     this.breakpoint
       .observe('(max-width: 900px)')
       .pipe(takeUntilDestroyed())
@@ -86,6 +99,12 @@ export class AppLayout {
 
   get sesion() {
     return this.authService.obtenerSesion()();
+  }
+
+  /** Iniciales de nombre y apellido, ej. "Admin Sistema" -> "AS". */
+  get iniciales(): string {
+    const partes = (this.sesion?.nombreCompleto ?? '').trim().split(/\s+/).filter(Boolean);
+    return ((partes[0]?.[0] ?? '') + (partes[1]?.[0] ?? '')).toUpperCase();
   }
 
   etiquetaRol(rol: string | null | undefined): string {
