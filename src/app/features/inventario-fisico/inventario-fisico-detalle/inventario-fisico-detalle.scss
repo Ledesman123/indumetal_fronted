@@ -19,11 +19,11 @@
     margin: 0;
     font-size: 22px;
     font-weight: 700;
-    color: #1a1f2b;
+    color: var(--c-texto);
   }
 
   p {
-    color: #767e8c;
+    color: var(--c-texto-sec);
     margin: 4px 0 0 40px;
     font-size: 13px;
   }
@@ -32,7 +32,7 @@
 .tabla-envoltorio {
   overflow-x: auto;
   border-radius: 8px;
-  background: white;
+  background: var(--c-superficie);
   margin-bottom: 16px;
 
   table { width: 100%; }
@@ -40,7 +40,7 @@
 
 .subtexto {
   font-size: 12px;
-  color: #777;
+  color: var(--c-texto-sec);
 }
 
 .campo-conteo {
@@ -53,14 +53,14 @@
 }
 
 .pendiente {
-  color: #999;
+  color: var(--c-texto-sec);
   font-style: italic;
   font-size: 13px;
 }
 
-.diferencia-cero { color: #666; }
-.diferencia-positiva { color: #1e7e34; font-weight: 600; }
-.diferencia-negativa { color: #b3261e; font-weight: 600; }
+.diferencia-cero { color: var(--c-texto-sec); }
+.diferencia-positiva { color: var(--c-verde); font-weight: 600; }
+.diferencia-negativa { color: var(--c-rojo); font-weight: 600; }
 
 .chip {
   font-size: 11px;
@@ -69,8 +69,8 @@
   border-radius: 10px;
 }
 
-.chip-proceso { background: #fff8e1; color: #8a6d00; }
-.chip-cerrado { background: #e6f4ea; color: #1e7e34; }
+.chip-proceso { background: var(--c-ambar-suave); color: var(--c-ambar); }
+.chip-cerrado { background: var(--c-verde-suave); color: var(--c-verde); }
 
 .barra-acciones {
   display: flex;
@@ -84,7 +84,7 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #8a6d00;
+  color: var(--c-ambar);
 
   mat-icon { font-size: 18px; width: 18px; height: 18px; }
 }
@@ -93,8 +93,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #b3261e;
-  background: #fdecea;
+  color: var(--c-rojo);
+  background: var(--c-rojo-suave);
   padding: 10px 14px;
   border-radius: 6px;
   margin-bottom: 16px;

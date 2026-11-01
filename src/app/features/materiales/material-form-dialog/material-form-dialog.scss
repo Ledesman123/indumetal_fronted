@@ -28,16 +28,16 @@
 }
 
 .zona-imagen {
-  border: 2px dashed #c4c4c4;
+  border: 2px dashed var(--c-borde);
   border-radius: 10px;
   padding: 16px;
   margin-bottom: 16px;
   transition: border-color 0.2s, background-color 0.2s;
-  background: #fafafa;
+  background: var(--c-superficie-2);
 
   &.arrastrando {
     border-color: #1f3a5c;
-    background: #eef3f8;
+    background: var(--c-superficie-2);
   }
 }
 
@@ -47,13 +47,13 @@
   align-items: center;
   gap: 4px;
   padding: 20px 0;
-  color: #777;
+  color: var(--c-texto-sec);
 
   mat-icon {
     font-size: 40px;
     width: 40px;
     height: 40px;
-    color: #aaa;
+    color: var(--c-texto-sec);
     margin-bottom: 4px;
   }
 
@@ -84,7 +84,7 @@
     position: absolute;
     top: -8px;
     right: -8px;
-    background: white;
+    background: var(--c-superficie);
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   }
 }
@@ -93,8 +93,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #b3261e;
-  background: #fdecea;
+  color: var(--c-rojo);
+  background: var(--c-rojo-suave);
   padding: 10px 12px;
   border-radius: 6px;
   margin-bottom: 16px;

@@ -8,8 +8,8 @@
   align-items: flex-start;
   margin-bottom: 20px;
 
-  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
-  p { color: #767e8c; margin: 0; font-size: 14px; }
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: var(--c-texto); }
+  p { color: var(--c-texto-sec); margin: 0; font-size: 14px; }
 }
 
 .acciones-inicio {
@@ -25,8 +25,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fdecea;
-  color: #b3261e;
+  background: var(--c-rojo-suave);
+  color: var(--c-rojo);
   padding: 10px 14px;
   border-radius: 6px;
   margin-bottom: 16px;
@@ -37,8 +37,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background: #fff8e1;
-  color: #8a6d00;
+  background: var(--c-ambar-suave);
+  color: var(--c-ambar);
   padding: 10px 14px;
   border-radius: 6px;
   margin-bottom: 16px;
@@ -48,7 +48,7 @@
 .tabla-envoltorio {
   overflow-x: auto;
   border-radius: 8px;
-  background: white;
+  background: var(--c-superficie);
 
   table { width: 100%; }
 }
@@ -60,8 +60,8 @@
   border-radius: 10px;
 }
 
-.chip-proceso { background: #fff8e1; color: #8a6d00; }
-.chip-cerrado { background: #e6f4ea; color: #1e7e34; }
+.chip-proceso { background: var(--c-ambar-suave); color: var(--c-ambar); }
+.chip-cerrado { background: var(--c-verde-suave); color: var(--c-verde); }
 
 .estado-vacio {
   display: flex;
@@ -69,7 +69,7 @@
   align-items: center;
   gap: 8px;
   padding: 48px 0;
-  color: #999;
+  color: var(--c-texto-sec);
 
   mat-icon { font-size: 40px; width: 40px; height: 40px; }
 }

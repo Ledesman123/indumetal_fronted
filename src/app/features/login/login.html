@@ -1,5 +1,10 @@
 <div class="pagina-login">
 
+  <button mat-icon-button [matTooltip]="temaService.tema() === 'oscuro' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+    (click)="temaService.alternar()" class="boton-tema">
+    <mat-icon>{{ temaService.tema() === 'oscuro' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
   <!-- Panel izquierdo: marca e informacion -->
   <div class="panel-marca">
     <div class="contenido-marca">

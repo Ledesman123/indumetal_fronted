@@ -5,8 +5,8 @@
 .encabezado-pagina {
   margin-bottom: 24px;
 
-  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
-  p { color: #767e8c; margin: 0; font-size: 14px; }
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: var(--c-texto); }
+  p { color: var(--c-texto-sec); margin: 0; font-size: 14px; }
 }
 
 .barra-acciones {
@@ -35,7 +35,7 @@
 .tabla-envoltorio {
   overflow-x: auto;
   border-radius: 8px;
-  background: white;
+  background: var(--c-superficie);
 
   table {
     width: 100%;
@@ -53,8 +53,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f0f0f0;
-  color: #999;
+  background: var(--c-superficie-2);
+  color: var(--c-texto-sec);
 
   mat-icon {
     font-size: 20px;
@@ -69,7 +69,7 @@
 
 .descripcion-material {
   font-size: 12px;
-  color: #777;
+  color: var(--c-texto-sec);
   max-width: 280px;
   white-space: nowrap;
   overflow: hidden;
@@ -77,13 +77,13 @@
 }
 
 .chip-activo {
-  background: #e6f4ea !important;
-  color: #1e7e34 !important;
+  background: var(--c-verde-suave) !important;
+  color: var(--c-verde) !important;
 }
 
 .chip-inactivo {
-  background: #fdecea !important;
-  color: #b3261e !important;
+  background: var(--c-rojo-suave) !important;
+  color: var(--c-rojo) !important;
 }
 
 .estado-vacio {
@@ -92,7 +92,7 @@
   align-items: center;
   gap: 8px;
   padding: 48px 0;
-  color: #999;
+  color: var(--c-texto-sec);
 
   mat-icon {
     font-size: 40px;

@@ -163,7 +163,7 @@
   max-width: 460px;
   padding: 40px 40px 28px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--c-tarjeta-login);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
@@ -178,8 +178,8 @@
 .logo-marca-pequeno {
   margin-bottom: 24px;
 
-  .icono-logo { font-size: 32px; width: 32px; height: 32px; color: #1c5fd1; }
-  .linea-1 { color: #1a1f2b; font-size: 17px; }
+  .icono-logo { font-size: 32px; width: 32px; height: 32px; color: var(--c-azul); }
+  .linea-1 { color: var(--c-texto); font-size: 17px; }
   .linea-2 { color: #6b7a99; font-size: 11px; }
 }
 
@@ -187,11 +187,11 @@
   margin: 0 0 4px;
   font-size: 22px;
   font-weight: 800;
-  color: #0d1b3d;
+  color: var(--c-texto);
 }
 
 .subtitulo-form {
-  color: #767e8c;
+  color: var(--c-texto-sec);
   font-size: 14px;
   margin: 0 0 24px;
 }
@@ -201,7 +201,7 @@
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.2px;
-  color: #2b3445;
+  color: var(--c-texto);
   margin-bottom: 6px;
 }
 
@@ -210,28 +210,28 @@
   margin-bottom: 10px;
 
   @include mat.form-field-overrides((
-    outlined-outline-color: #d3dae6,
+    outlined-outline-color: var(--c-borde),
     outlined-hover-outline-color: #9fb3d9,
-    outlined-focus-outline-color: #1c5fd1,
+    outlined-focus-outline-color: var(--c-azul),
     outlined-focus-outline-width: 2px,
     outlined-container-shape: 10px,
-    outlined-input-text-color: #1a1f2b,
-    outlined-input-text-placeholder-color: #a3acbb
+    outlined-input-text-color: var(--c-texto),
+    outlined-input-text-placeholder-color: var(--c-texto-sec)
   ));
 
   ::ng-deep .mat-mdc-text-field-wrapper {
-    background: #fbfcfe;
+    background: var(--c-superficie-2);
     border-radius: 10px;
     transition: background-color 0.15s, box-shadow 0.15s;
   }
 
   &.mat-focused ::ng-deep .mat-mdc-text-field-wrapper {
-    background: #ffffff;
+    background: var(--c-superficie);
     box-shadow: 0 0 0 4px rgba(28, 95, 209, 0.08);
   }
 
   &.mat-focused .icono-campo {
-    color: #1c5fd1;
+    color: var(--c-azul);
   }
 }
 
@@ -272,15 +272,15 @@
   margin-top: 14px;
   font-size: 13px;
   font-weight: 600;
-  color: #1c5fd1;
+  color: var(--c-azul);
 }
 
 .mensaje-error {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #b3261e;
-  background: #fdecea;
+  color: var(--c-rojo);
+  background: var(--c-rojo-suave);
   padding: 10px 12px;
   border-radius: 6px;
   margin-bottom: 16px;
@@ -293,7 +293,7 @@
   gap: 10px;
   margin-top: 28px;
   padding-top: 20px;
-  border-top: 1px solid #eee;
+  border-top: 1px solid var(--c-borde);
   color: #99a2b3;
 
   mat-icon {
@@ -312,4 +312,14 @@
 
 mat-spinner {
   display: inline-block;
+}
+// Boton de tema claro/oscuro (esquina superior derecha)
+.boton-tema {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(6px);
 }

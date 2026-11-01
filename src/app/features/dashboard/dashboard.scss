@@ -11,11 +11,11 @@
     font-weight: 700;
     letter-spacing: 0.2px;
     line-height: 1.3;
-    color: #1a1f2b;
+    color: var(--c-texto);
   }
 
   p {
-    color: #767e8c;
+    color: var(--c-texto-sec);
     margin: 0;
     font-size: 14px;
     line-height: 1.5;
@@ -37,7 +37,7 @@
   gap: 14px;
   padding: 18px 20px;
   border-radius: 10px;
-  background: white;
+  background: var(--c-superficie);
 }
 
 .icono-indicador {
@@ -52,17 +52,17 @@
   mat-icon { font-size: 22px; width: 22px; height: 22px; }
 }
 
-.icono-azul   { background: #e8f0fe; color: #1c5fd1; }
-.icono-verde  { background: #e6f4ea; color: #1e7e34; }
-.icono-rojo   { background: #fdecea; color: #b3261e; }
-.icono-morado { background: #f1e9fb; color: #6a3fb8; }
+.icono-azul   { background: var(--c-azul-suave); color: var(--c-azul); }
+.icono-verde  { background: var(--c-verde-suave); color: var(--c-verde); }
+.icono-rojo   { background: var(--c-rojo-suave); color: var(--c-rojo); }
+.icono-morado { background: var(--c-morado-suave); color: var(--c-morado); }
 
 .dato-indicador {
   display: flex;
   flex-direction: column;
 
-  .numero { font-size: 22px; font-weight: 700; color: #1a1f2b; line-height: 1.2; }
-  .etiqueta { font-size: 12px; color: #888; }
+  .numero { font-size: 22px; font-weight: 700; color: var(--c-texto); line-height: 1.2; }
+  .etiqueta { font-size: 12px; color: var(--c-texto-sec); }
 }
 
 // ---------- Fila de paneles con barras ----------
@@ -79,7 +79,7 @@
 }
 
 .panel {
-  background: white;
+  background: var(--c-superficie);
   border-radius: 10px;
   padding: 20px 22px;
 
@@ -87,7 +87,7 @@
     margin: 0 0 16px;
     font-size: 15px;
     font-weight: 600;
-    color: #1a1f2b;
+    color: var(--c-texto);
   }
 }
 
@@ -101,7 +101,7 @@
 }
 
 .etiqueta-barra {
-  color: #444;
+  color: var(--c-texto);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -109,7 +109,7 @@
 
 .barra-fondo {
   height: 8px;
-  background: #eef1f5;
+  background: var(--c-borde);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -125,12 +125,12 @@
 
 .valor-barra {
   font-weight: 600;
-  color: #1a1f2b;
+  color: var(--c-texto);
   white-space: nowrap;
 }
 
 .sin-datos {
-  color: #999;
+  color: var(--c-texto-sec);
   font-size: 13px;
 }
 
@@ -160,7 +160,7 @@
   }
 
   .circulo-fondo {
-    stroke: #eef1f5;
+    stroke: var(--c-borde);
   }
 
   .circulo-relleno {
@@ -179,6 +179,6 @@
   flex-direction: column;
   align-items: center;
 
-  .porcentaje { font-size: 22px; font-weight: 700; color: #1a1f2b; }
-  .detalle { font-size: 11px; color: #888; }
+  .porcentaje { font-size: 22px; font-weight: 700; color: var(--c-texto); }
+  .detalle { font-size: 11px; color: var(--c-texto-sec); }
 }

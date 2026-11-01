@@ -2,7 +2,7 @@
   display: block;
   font-size: 13px;
   font-weight: 400;
-  color: #777;
+  color: var(--c-texto-sec);
   margin-top: 2px;
 }
 
@@ -11,12 +11,12 @@
 }
 
 .valor-entrada {
-  color: #1e7e34;
+  color: var(--c-verde);
   font-weight: 600;
 }
 
 .valor-salida {
-  color: #b3261e;
+  color: var(--c-rojo);
   font-weight: 600;
 }
 
@@ -26,7 +26,7 @@
   align-items: center;
   gap: 8px;
   padding: 40px 0;
-  color: #999;
+  color: var(--c-texto-sec);
 
   mat-icon { font-size: 36px; width: 36px; height: 36px; }
 }

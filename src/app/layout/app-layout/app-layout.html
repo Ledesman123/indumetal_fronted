@@ -36,6 +36,11 @@
 
       <span class="espaciador"></span>
 
+      <button mat-icon-button [matTooltip]="temaService.tema() === 'oscuro' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+        (click)="temaService.alternar()">
+        <mat-icon>{{ temaService.tema() === 'oscuro' ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+
       <button mat-icon-button matTooltip="Notificaciones" [matMenuTriggerFor]="menuNotificaciones">
         <mat-icon [matBadge]="cantidadNoLeidas()" matBadgeSize="small" matBadgeColor="warn"
           [matBadgeHidden]="cantidadNoLeidas() === 0">

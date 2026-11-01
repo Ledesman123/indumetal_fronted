@@ -1,7 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="utf-8" />
+    <script>
+      // Aplica el tema guardado antes de que cargue Angular (evita un destello claro). Ver TemaService.
+      (function () {
+        try {
+          var t = localStorage.getItem('indumetal_tema');
+          if (t === 'oscuro' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('tema-oscuro');
+          }
+        } catch (e) {}
+      })();
+    </script>
     <title>INDUMETAL · Gestión de Almacén</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

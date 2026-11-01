@@ -5,8 +5,8 @@
 .encabezado-pagina {
   margin-bottom: 24px;
 
-  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
-  p { color: #767e8c; margin: 0; font-size: 14px; }
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: var(--c-texto); }
+  p { color: var(--c-texto-sec); margin: 0; font-size: 14px; }
 }
 
 .grid-reportes {
@@ -16,7 +16,7 @@
 }
 
 .tarjeta-reporte {
-  background: white;
+  background: var(--c-superficie);
   border-radius: 10px;
   padding: 22px 24px;
   display: flex;
@@ -30,20 +30,20 @@
   margin-bottom: 4px;
 
   mat-icon {
-    color: #1c5fd1;
+    color: var(--c-azul);
   }
 
   h3 {
     margin: 0;
     font-size: 15px;
     font-weight: 600;
-    color: #1a1f2b;
+    color: var(--c-texto);
   }
 }
 
 .descripcion-tarjeta {
   font-size: 13px;
-  color: #888;
+  color: var(--c-texto-sec);
   margin: 0 0 16px;
   line-height: 1.4;
 }

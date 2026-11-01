@@ -5,12 +5,12 @@
 .encabezado-pagina {
   margin-bottom: 24px;
 
-  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
-  p { color: #767e8c; margin: 0; font-size: 14px; }
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: var(--c-texto); }
+  p { color: var(--c-texto-sec); margin: 0; font-size: 14px; }
 }
 
 .panel-formulario, .panel-historial {
-  background: white;
+  background: var(--c-superficie);
   border-radius: 10px;
   padding: 22px 24px;
   margin-bottom: 20px;
@@ -20,7 +20,7 @@
   margin: 0 0 16px;
   font-size: 15px;
   font-weight: 600;
-  color: #1a1f2b;
+  color: var(--c-texto);
 }
 
 .selector-tipo {
@@ -32,8 +32,8 @@
   }
 
   ::ng-deep .mat-button-toggle-checked {
-    background: #e8f0fe;
-    color: #1c5fd1;
+    background: var(--c-azul-suave);
+    color: var(--c-azul);
   }
 
   mat-icon {
@@ -76,8 +76,8 @@
   font-size: 14px;
 }
 
-.mensaje-error { color: #b3261e; background: #fdecea; }
-.mensaje-exito { color: #1e7e34; background: #e6f4ea; }
+.mensaje-error { color: var(--c-rojo); background: var(--c-rojo-suave); }
+.mensaje-exito { color: var(--c-verde); background: var(--c-verde-suave); }
 
 .chip-tipo {
   font-size: 11px;
@@ -86,11 +86,11 @@
   border-radius: 10px;
 }
 
-.tipo-ingreso { background: #e6f4ea; color: #1e7e34; }
-.tipo-salida { background: #fdecea; color: #b3261e; }
-.tipo-devolucion { background: #e8f0fe; color: #1c5fd1; }
-.tipo-transferencia { background: #f1e9fb; color: #6a3fb8; }
-.tipo-ajuste { background: #fff8e1; color: #8a6d00; }
+.tipo-ingreso { background: var(--c-verde-suave); color: var(--c-verde); }
+.tipo-salida { background: var(--c-rojo-suave); color: var(--c-rojo); }
+.tipo-devolucion { background: var(--c-azul-suave); color: var(--c-azul); }
+.tipo-transferencia { background: var(--c-morado-suave); color: var(--c-morado); }
+.tipo-ajuste { background: var(--c-ambar-suave); color: var(--c-ambar); }
 
 .estado-vacio {
   display: flex;
@@ -98,7 +98,7 @@
   align-items: center;
   gap: 8px;
   padding: 40px 0;
-  color: #999;
+  color: var(--c-texto-sec);
 
   mat-icon { font-size: 36px; width: 36px; height: 36px; }
 }

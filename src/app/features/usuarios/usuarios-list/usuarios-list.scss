@@ -8,14 +8,14 @@
   align-items: flex-start;
   margin-bottom: 20px;
 
-  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: #1a1f2b; }
-  p { color: #767e8c; margin: 0; font-size: 14px; }
+  h2 { margin: 0 0 6px; font-size: 24px; font-weight: 700; color: var(--c-texto); }
+  p { color: var(--c-texto-sec); margin: 0; font-size: 14px; }
 }
 
 .tabla-envoltorio {
   overflow-x: auto;
   border-radius: 8px;
-  background: white;
+  background: var(--c-superficie);
 
   table { width: 100%; }
 }
@@ -45,6 +45,6 @@
   font-weight: 600;
   padding: 4px 10px;
   border-radius: 10px;
-  background: #e8f0fe;
-  color: #1c5fd1;
+  background: var(--c-azul-suave);
+  color: var(--c-azul);
 }

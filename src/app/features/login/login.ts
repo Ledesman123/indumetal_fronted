@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { TemaService } from '../../core/services/tema.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthService } from '../../core/services/auth.service';
 import { ForgotPasswordDialog } from './forgot-password-dialog/forgot-password-dialog';
@@ -23,12 +25,14 @@ import { ForgotPasswordDialog } from './forgot-password-dialog/forgot-password-d
     MatInputModule,
     MatButtonModule,
     MatIconModule,
+    MatTooltipModule,
     MatProgressSpinnerModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
 export class Login {
+  temaService = inject(TemaService);
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
