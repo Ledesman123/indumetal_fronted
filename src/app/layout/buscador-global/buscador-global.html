@@ -9,9 +9,6 @@
     (focus)="abrir()"
     (input)="alEscribir(entrada.value)"
     (keydown)="alTeclear($event)">
-  @if (!termino()) {
-    <kbd class="atajo">Ctrl K</kbd>
-  }
 </div>
 
 @if (abierto() && termino().trim()) {

@@ -148,7 +148,7 @@ export class BuscadorGlobal {
 
   @HostListener('document:keydown', ['$event'])
   atajo(evento: KeyboardEvent): void {
-    if ((evento.ctrlKey || evento.metaKey) && evento.key.toLowerCase() === 'k') {
+    if (evento.ctrlKey && evento.key.toLowerCase() === 'k') {
       evento.preventDefault();
       this.input().nativeElement.focus();
       this.abrir();
