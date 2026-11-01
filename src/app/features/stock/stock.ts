@@ -1,5 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,12 +34,21 @@ import { KardexDialog } from './kardex-dialog/kardex-dialog';
 })
 export class Stock implements OnInit {
   private movimientoService = inject(MovimientoService);
+  private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
 
   columnas = ['material', 'almacen', 'ubicacion', 'cantidad', 'rango', 'estado', 'acciones'];
   stockCompleto = signal<StockUbicacion[]>([]);
   cargando = signal(true);
   termino = '';
+
+  constructor() {
+    // ?buscar=... (desde el buscador global del header) rellena el filtro
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      const buscar = params.get('buscar');
+      if (buscar !== null) this.termino = buscar;
+    });
+  }
 
   ngOnInit(): void {
     this.cargar();

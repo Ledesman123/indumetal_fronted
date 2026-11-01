@@ -182,3 +182,9 @@ input:-webkit-autofill:focus {
 .celda-codigo {
   white-space: nowrap;
 }
+
+/* Buscador global dentro del header (ver layout/buscador-global) */
+.buscador-header {
+  margin-left: 12px;
+  flex: 1 1 auto;
+}

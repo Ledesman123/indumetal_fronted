@@ -34,6 +34,10 @@
       </div>
       }
 
+      @if (!esTelefono()) {
+      <app-buscador-global class="buscador-header"></app-buscador-global>
+      }
+
       <span class="espaciador"></span>
 
       <button mat-icon-button [matTooltip]="temaService.tema() === 'oscuro' ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"

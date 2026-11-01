@@ -21,6 +21,7 @@ import { PerfilDialog } from '../../shared/perfil-dialog/perfil-dialog';
 import { CambiarPasswordDialog } from '../../shared/cambiar-password-dialog/cambiar-password-dialog';
 import { PerfilService } from '../../core/services/perfil.service';
 import { TemaService } from '../../core/services/tema.service';
+import { BuscadorGlobal } from '../buscador-global/buscador-global';
 const RUTAS_PRIORITARIAS_TELEFONO = ['/dashboard', '/movimientos', '/stock', '/materiales'];
 const MAX_ITEMS_BARRA = 5;
 
@@ -38,7 +39,8 @@ const MAX_ITEMS_BARRA = 5;
     MatButtonModule,
     MatMenuModule,
     MatTooltipModule,
-    MatBadgeModule
+    MatBadgeModule,
+    BuscadorGlobal
   ],
   templateUrl: './app-layout.html',
   styleUrl: './app-layout.scss'

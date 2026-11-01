@@ -1,5 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,6 +36,8 @@ import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 export class AlmacenesList implements OnInit {
   private almacenService = inject(AlmacenService);
   private ubicacionService = inject(UbicacionService);
+  private route = inject(ActivatedRoute);
+  private idSolicitado: number | null = null;
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
@@ -44,6 +48,16 @@ export class AlmacenesList implements OnInit {
   cargandoUbicaciones = signal(false);
 
   columnasUbicacion = ['codigo', 'estado', 'acciones'];
+
+  constructor() {
+    // ?id=N (desde el buscador global del header) selecciona ese almacen
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      const id = Number(params.get('id'));
+      this.idSolicitado = id || null;
+      const encontrado = this.almacenes().find((a) => a.id === id);
+      if (encontrado) this.seleccionarAlmacen(encontrado);
+    });
+  }
 
   ngOnInit(): void {
     this.cargarAlmacenes();
@@ -57,7 +71,9 @@ export class AlmacenesList implements OnInit {
 
       // Si ya habia uno seleccionado, refresca sus datos; si no, selecciona el primero.
       const actual = this.almacenSeleccionado();
-      const paraSeleccionar = actual ? lista.find((a) => a.id === actual.id) : lista[0];
+      const solicitado = this.idSolicitado ? lista.find((a) => a.id === this.idSolicitado) : undefined;
+      const paraSeleccionar = solicitado ?? (actual ? lista.find((a) => a.id === actual.id) : lista[0]);
+      this.idSolicitado = null;
       if (paraSeleccionar) this.seleccionarAlmacen(paraSeleccionar);
     });
   }

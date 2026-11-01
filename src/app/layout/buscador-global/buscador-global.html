@@ -1,0 +1,57 @@
+<div class="caja-busqueda" [class.enfocada]="abierto()">
+  <mat-icon class="icono-buscar">search</mat-icon>
+  <input
+    #entrada
+    type="text"
+    placeholder="Buscar materiales, almacenes, usuarios…"
+    autocomplete="off"
+    aria-label="Buscar en el sistema"
+    (focus)="abrir()"
+    (input)="alEscribir(entrada.value)"
+    (keydown)="alTeclear($event)">
+  @if (!termino()) {
+    <kbd class="atajo">Ctrl K</kbd>
+  }
+</div>
+
+@if (abierto() && termino().trim()) {
+  <div class="panel-resultados" role="listbox">
+    @if (cargando()) {
+      <div class="estado-panel">
+        <mat-icon class="girando">autorenew</mat-icon>
+        <span>Cargando datos…</span>
+      </div>
+    } @else {
+      @for (grupo of grupos(); track grupo.nombre) {
+        <div class="titulo-grupo">{{ grupo.nombre }}</div>
+        @for (item of grupo.items; track item.indice) {
+          <button
+            type="button"
+            class="resultado"
+            role="option"
+            [class.activo]="item.indice === activo()"
+            (mouseenter)="activo.set(item.indice)"
+            (click)="elegir(item.resultado)">
+            <span class="icono-resultado"><mat-icon>{{ item.resultado.icono }}</mat-icon></span>
+            <span class="texto-resultado">
+              <strong>{{ item.resultado.titulo }}</strong>
+              <small>{{ item.resultado.detalle }}</small>
+            </span>
+            <mat-icon class="flecha">arrow_forward</mat-icon>
+          </button>
+        }
+      } @empty {
+        <div class="estado-panel">
+          <mat-icon>search_off</mat-icon>
+          <span>Sin resultados para "{{ termino() }}"</span>
+        </div>
+      }
+    }
+
+    <div class="pie-panel">
+      <span><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
+      <span><kbd>Enter</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+}

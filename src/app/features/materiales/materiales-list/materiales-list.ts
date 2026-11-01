@@ -1,5 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
@@ -38,6 +40,7 @@ import { ConfirmDialog } from '../../../shared/confirm-dialog/confirm-dialog';
 })
 export class MaterialesList implements OnInit {
   private materialService = inject(MaterialService);
+  private route = inject(ActivatedRoute);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
 
@@ -47,6 +50,14 @@ export class MaterialesList implements OnInit {
   termino = '';
   categoriaSeleccionada: string | null = null;
   categorias = CATEGORIAS_MATERIAL;
+
+  constructor() {
+    // ?buscar=... (desde el buscador global del header) rellena el filtro
+    this.route.queryParamMap.pipe(takeUntilDestroyed()).subscribe((params) => {
+      const buscar = params.get('buscar');
+      if (buscar !== null) this.termino = buscar;
+    });
+  }
 
   ngOnInit(): void {
     this.cargarMateriales();
